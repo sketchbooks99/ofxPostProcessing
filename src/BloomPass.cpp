@@ -54,7 +54,6 @@ namespace itg
             s.width = ofNextPow2(resolution);
             s.height = ofNextPow2(resolution);
             s.textureTarget = GL_TEXTURE_2D;
-            
         }
         s.useDepth = true;
         

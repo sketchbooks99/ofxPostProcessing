@@ -123,22 +123,40 @@ namespace itg
             glDisable(GL_TEXTURE_3D);
         }
 
+        string vertShaderSrc = STRINGIFY(
+                                         #version 410 core\n
+                                         in vec2 texcoord;
+                                         in vec4 position;
+                                         uniform mat4 modelViewProjectionMatrix;
+                                         out vec2 vTexCoord;
+                                         void main() {
+                                             gl_Position = modelViewProjectionMatrix * position;
+                                             vTexCoord = texcoord;
+                                         }
+        );
+
         // setup shader
         string fragShaderSrc = STRINGIFY(
+            #version 410 core\n
             uniform sampler2D tex;
             uniform sampler3D lut_tex;
 
+            in vec2 vTexCoord;
+            out vec4 fragColor;
+
             void main()
             {
-                vec4 c = texture2D(tex, gl_TexCoord[0].xy);
+                vec4 c = texture(tex, gl_TexCoord[0].xy);
                 vec3 src = c.rgb;
                 src = clamp(src, 0., 0.98);
                 vec3 dst = texture3D(lut_tex, src).rgb;
-                gl_FragColor = gl_Color * vec4(dst, c.a);
+                fragColor = gl_Color * vec4(dst, c.a);
             }
         );
 
+        shader.setupShaderFromSource(GL_VERTEX_SHADER, vertShaderSrc);
         shader.setupShaderFromSource(GL_FRAGMENT_SHADER, fragShaderSrc);
+		shader.bindDefaults();
         shader.linkProgram();
 
         return this;
@@ -164,7 +182,8 @@ namespace itg
         shader.setUniformTexture("tex", readFbo.getTexture(), 0);
         shader.setUniformTexture("lut_tex", GL_TEXTURE_3D, lut_tex, 1);
 
-        texturedQuad(0, 0, writeFbo.getWidth(), writeFbo.getHeight());
+        //texturedQuad(0, 0, writeFbo.getWidth(), writeFbo.getHeight());
+		quad.draw(OF_MESH_FILL);
 
         shader.end();
 

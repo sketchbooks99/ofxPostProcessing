@@ -37,53 +37,67 @@ namespace itg
         RenderPass(aspect, arb, "rimhighlighting")
     {
         string vertShaderSrc = STRINGIFY(
-                                         varying vec3 normal;
-                                         varying vec3 sides;
-                                         varying vec2 v_texCoord;
-                                         varying vec4 v_color;
+                                         #version 410 core\n
+                                         uniform mat4 modelViewProjectionMatrix; 
+
+                                         in vec2 texcoord;
+                                         in vec3 normal;
+                                         in vec4 position;
+                                         in vec4 color;
+
+                                         out vec3 vNormal;
+                                         out vec3 sides;
+                                         out vec2 vTexCoord;
+                                         out vec4 vColor;
                                          
                                          void main()
         {
-            normal = gl_NormalMatrix * gl_Normal;
-            gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
+            vNormal = gl_NormalMatrix * normal;
+            gl_Position = position;
             sides = gl_Position.xyz;
             sides.x = sides.x - 128.0;
             
-            v_texCoord = vec2(gl_MultiTexCoord0);
-            v_color = gl_Color;
+            // vTexCoord = vec2(gl_MultiTexCoord0);
+            vTexCoord = texcoord;
+            // v_color = gl_Color;
+            vColor = color;
         }
                                          );
         
         string fragShaderSrc = STRINGIFY(
-                                         varying vec3 normal;
-                                         varying vec3 sides;
-                                         varying vec2 v_texCoord;
+                                         #version 410 core\n
+                                         in vec3 vNormal;
+                                         in vec3 sides;
+                                         in vec2 vTexCoord;
                                          uniform sampler2D myTexture;
-                                         varying vec4 v_color;
+                                         in vec4 vColor;
+
+                                         out vec4 fragColor;
                                          
                                          void main()
         {
             float intensity;
-            vec3 n = normalize(normal);
+            vec3 n = normalize(vNormal);
             vec4 color;
             intensity = dot(sides,n);
             
-            gl_FragColor = texture2D(myTexture, v_texCoord);
+            fragColor = texture(myTexture, vTexCoord);
             if (intensity >= 64.0)
             {
-                gl_FragColor.b = gl_FragColor.b / 1.5;
-                gl_FragColor.r = gl_FragColor.r * 1.5;
-                gl_FragColor.g = gl_FragColor.g * 1.25;
+                fragColor.b = fragColor.b / 1.5;
+                fragColor.r = fragColor.r * 1.5;
+                fragColor.g = fragColor.g * 1.25;
             }
             else
             {
-                gl_FragColor = gl_FragColor * v_color;
+                fragColor = fragColor * vColor;
             }
         }
         );
         
         shader.setupShaderFromSource(GL_VERTEX_SHADER, vertShaderSrc);
         shader.setupShaderFromSource(GL_FRAGMENT_SHADER, fragShaderSrc);
+		shader.bindDefaults();
         shader.linkProgram();
 
     }
@@ -95,7 +109,8 @@ namespace itg
         shader.begin();
         shader.setUniformTexture("myTexture", readFbo.getTexture(), 0);
         
-        texturedQuad(0, 0, writeFbo.getWidth(), writeFbo.getHeight());
+        //texturedQuad(0, 0, writeFbo.getWidth(), writeFbo.getHeight());
+		quad.draw(OF_MESH_FILL);
         
         shader.end();
         writeFbo.end();

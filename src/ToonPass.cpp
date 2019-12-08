@@ -42,20 +42,30 @@ namespace itg
         edgeThreshold(edgeThreshold), level(level), ambientColor(ambientColor), diffuseColor(diffuseColor), specularColor(specularColor), isSpecular(isSpecular), shinyness(shinyness), RenderPass(aspect, arb, "toon")
     {
         string vertShaderSrc = STRINGIFY(
-            varying vec3 v;
-            varying vec3 N;
+            #version 410 core\n
+            uniform mat4 modelViewMatrix;
+            uniform mat4 modelViewProjectionMatrix;
+            in vec4 position;
+            in vec3 normal;
+            in vec2 texcoord;
+
+            out vec3 v;
+            out vec3 N;
 
             void main()
             {
-                v = vec3(gl_ModelViewMatrix * gl_Vertex);
-                N = normalize(gl_NormalMatrix * gl_Normal);
+                // v = vec3(gl_ModelViewMatrix * gl_Vertex);
+                v = vec3(modelViewMatrix * position).xyz;
+                N = normalize(gl_NormalMatrix * normal);
 
-                gl_TexCoord[0] = gl_MultiTexCoord0;
-                gl_Position = ftransform();
+                // gl_TexCoord[0] = gl_MultiTexCoord0;
+                vTexCoord = texcoord;
+                gl_Position = position;
             }
         );
         
         string fragShaderSrc = STRINGIFY(
+            #version 410 core\n
             uniform sampler2D normalImage;
             uniform float textureSizeX;
             uniform float textureSizeY;
@@ -67,19 +77,22 @@ namespace itg
             uniform vec4 specular;
             uniform float shinyness;
                                          
-            varying vec3 v;
-            varying vec3 N;
+            in vec3 v;
+            in vec3 N;
+            in vTexCoord;
+
+            out vec4 fragColor;
 
             vec3 getNormal(vec2 st){
                 vec2 texcoord = clamp(st, 0.001, 0.999);
-                return texture2D(normalImage, texcoord).rgb;
+                return textur(normalImage, texcoord).rgb;
             }
 
             void main(void){
                 float dxtex = 1.0 / textureSizeX;
                 float dytex = 1.0 / textureSizeY;
 
-                vec2 st = gl_TexCoord[0].st;
+                vec2 st = vTexCoord;
                 // access center pixel and 4 surrounded pixel
                 vec3 center = getNormal(st).rgb;
                 vec3 left = getNormal(st + vec2(dxtex, 0.0)).rgb;
@@ -90,7 +103,7 @@ namespace itg
                 // discrete Laplace operator
                 vec3 laplace = abs(-4.0*center + left + right + up + down);
                 // if one rgb-component of convolution result is over threshold => edge
-                vec4 line = texture2D(normalImage, st);
+                vec4 line = texture(normalImage, st);
                 if(laplace.r > normalEdgeThreshold
                 || laplace.g > normalEdgeThreshold
                 || laplace.b > normalEdgeThreshold){
@@ -103,8 +116,8 @@ namespace itg
 
                 //start Phong
 
-                //vec3 lightPosition = vec3(100.0, 100.0, 50.0);
-                vec3 lightPosition = gl_LightSource[0].position.xyz;
+                vec3 lightPosition = vec3(100.0, 100.0, 50.0);
+                // vec3 lightPosition = gl_LightSource[0].position.xyz;
 
                 vec3 L = normalize(lightPosition - v);
                 vec3 E = normalize(-v);
@@ -114,7 +127,7 @@ namespace itg
                 vec4 Iamb = ambient;
 
                 // diffuse term
-                vec4 Idiff = texture2D( normalImage, gl_TexCoord[0].st) * diffuse;
+                vec4 Idiff = texture( normalImage, vTexCoord) * diffuse;
                 //vec4 Idiff = vec4(1.0, 1.0, 1.0, 1.0) * diffuse;
                 Idiff *= max(dot(N,L), 0.0);
                 Idiff = clamp(Idiff, 0.0, 1.0);
@@ -133,13 +146,14 @@ namespace itg
                 // set fragment/pixel color
                 color.a = alpha;
 
-                gl_FragColor = color * line;
+                fragColor = color * line;
             }
                                          
 
         );
         shader.setupShaderFromSource(GL_VERTEX_SHADER, vertShaderSrc);
         shader.setupShaderFromSource(GL_FRAGMENT_SHADER, fragShaderSrc);
+		shader.bindDefaults();
         shader.linkProgram();
         
     }
@@ -162,7 +176,8 @@ namespace itg
         shader.setUniform4f("specular", specularColor.x, specularColor.y, specularColor.z, specularColor.w);
         shader.setUniform1f("shinyness", shinyness);
         
-        texturedQuad(0, 0, writeFbo.getWidth(), writeFbo.getHeight());
+        //texturedQuad(0, 0, writeFbo.getWidth(), writeFbo.getHeight());
+		quad.draw(OF_MESH_FILL);
         
         shader.end();
         writeFbo.end();

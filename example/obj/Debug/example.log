@@ -1,0 +1,81 @@
+﻿  BleachBypassPass.cpp
+  ContrastPass.cpp
+  ConvolutionPass.cpp
+  DofAltPass.cpp
+  DofPass.cpp
+  EdgePass.cpp
+  FakeSSSPass.cpp
+  GodRaysPass.cpp
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofVec3f.h : warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\DofAltPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofVec2f.h : warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\DofAltPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofVec3f.h : warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\EdgePass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofVec2f.h : warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\EdgePass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofVec3f.h : warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\GodRaysPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofVec2f.h : warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\GodRaysPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofVec3f.h : warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\ContrastPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofVec3f.h : warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\FakeSSSPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofVec2f.h : warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\ContrastPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofVec2f.h : warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\FakeSSSPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofVec3f.h : warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\DofPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofVec2f.h : warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\DofPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofVec3f.h : warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\BleachBypassPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofVec2f.h : warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\BleachBypassPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofVec3f.h : warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\ConvolutionPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofVec2f.h : warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\ConvolutionPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(326): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\ContrastPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(331): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\ContrastPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(912): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\ContrastPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(913): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\ContrastPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(914): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\ContrastPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(915): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\ContrastPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(326): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\EdgePass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(331): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\EdgePass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(326): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\GodRaysPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(331): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\GodRaysPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(912): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\EdgePass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(913): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\EdgePass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(914): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\EdgePass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(915): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\EdgePass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(326): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\DofAltPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(331): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\DofAltPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(912): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\GodRaysPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(913): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\GodRaysPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(914): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\GodRaysPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(915): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\GodRaysPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(912): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\DofAltPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(913): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\DofAltPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(914): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\DofAltPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(915): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\DofAltPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(326): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\FakeSSSPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(331): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\FakeSSSPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(912): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\FakeSSSPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(913): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\FakeSSSPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(914): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\FakeSSSPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(915): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\FakeSSSPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(326): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\DofPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(331): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\DofPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(912): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\DofPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(913): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\DofPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(914): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\DofPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(915): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\DofPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(326): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\BleachBypassPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(331): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\BleachBypassPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(912): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\BleachBypassPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(913): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\BleachBypassPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(914): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\BleachBypassPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(915): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\BleachBypassPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(326): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\ConvolutionPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(331): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\ConvolutionPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(912): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\ConvolutionPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(913): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\ConvolutionPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(914): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\ConvolutionPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\libs\openFrameworks\math\ofMatrix4x4.h(915): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。 (ソース ファイルをコンパイルしています ..\..\..\addons\ofxPostProcessing\src\ConvolutionPass.cpp)
+C:\Users\lunae\Desktop\of0.10.1\addons\ofxPostProcessing\src\ConvolutionPass.cpp(124): warning C4267: '引数': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
+  example.vcxproj -> C:\Users\lunae\Desktop\of0.10.1\addons\ofxPostProcessing\example\bin\example_debug.exe
+  
+  	                   2	C:\Users\lunae\Desktop\of0.10.1\libs\fmodex\lib\vs\x64\
+  	  *EXTRA File 		 6942208	C:\Users\lunae\Desktop\of0.10.1\addons\ofxPostProcessing\example\bin\FreeImage.dll
+  
+  	                   1	C:\Users\lunae\Desktop\of0.10.1\libs\FreeImage\lib\vs\x64\
+  	  *EXTRA File 		 1503232	C:\Users\lunae\Desktop\of0.10.1\addons\ofxPostProcessing\example\bin\fmodex64.dll
+  	  *EXTRA File 		 1552384	C:\Users\lunae\Desktop\of0.10.1\addons\ofxPostProcessing\example\bin\fmodexL64.dll

@@ -39,8 +39,20 @@ namespace itg
                                    float weight, float clamp) :
         centerX(centerX), centerY(centerY), exposure(exposure), decay(decay), density(density), weight(weight), clamp(clamp), RenderPass(aspect, arb, "zoomblur")
     {
-        
+        string vertShaderSrc = STRINGIFY(
+                                         #version 410 core\n
+                                         in vec2 texcoord;
+                                         in vec4 position;
+                                         uniform mat4 modelViewProjectionMatrix;
+                                         out vec2 vTexCoord;
+                                         void main() {
+                                             gl_Position = position;
+                                             vTexCoord = texcoord;
+                                         }
+        );
+
         string fragShaderSrc = STRINGIFY(
+            #version 410 core\n
             uniform sampler2D tDiffuse;
 
             uniform float fX;
@@ -51,11 +63,14 @@ namespace itg
             uniform float fWeight;
             uniform float fClamp;
 
+            in vec2 vTexCoord;
+            out vec4 fragColor;
+
             const int iSamples = 20;
 
             void main()
             {
-                vec2 vUv = gl_TexCoord[0].st;
+                vec2 vUv = vTexCoord;
                 vec2 deltaTextCoord = vec2(vUv - vec2(fX,fY));
                 deltaTextCoord *= 1.0 /  float(iSamples) * fDensity;
                 vec2 coord = vUv;
@@ -65,7 +80,7 @@ namespace itg
                 for(int i=0; i < iSamples ; i++)
                 {
                     coord -= deltaTextCoord;
-                    vec4 texel = texture2D(tDiffuse, coord);
+                    vec4 texel = texture(tDiffuse, coord);
                     texel *= illuminationDecay * fWeight;
 
                     FragColor += texel;
@@ -74,11 +89,13 @@ namespace itg
                 }
                 FragColor *= fExposure;
                 FragColor = clamp(FragColor, 0.0, fClamp);
-                gl_FragColor = FragColor;
+                fragColor = FragColor;
             }
         );
         
+        shader.setupShaderFromSource(GL_VERTEX_SHADER, vertShaderSrc);
         shader.setupShaderFromSource(GL_FRAGMENT_SHADER, fragShaderSrc);
+		shader.bindDefaults();
         shader.linkProgram();
         
     }
@@ -99,7 +116,8 @@ namespace itg
         shader.setUniform1f("fWeight", weight);
         shader.setUniform1f("fClamp", clamp);
         
-        texturedQuad(0, 0, writeFbo.getWidth(), writeFbo.getHeight());
+        //texturedQuad(0, 0, writeFbo.getWidth(), writeFbo.getHeight());
+		quad.draw(OF_MESH_FILL);
         
         shader.end();
         writeFbo.end();

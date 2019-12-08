@@ -39,15 +39,25 @@ namespace itg
     {
         
         string vertShaderSrc = STRINGIFY(
+            #version 410 core\n
+            uniform mat4 modelViewProjectionMatrix;
+            in vec2 texcoord;
+            in vec4 color;
+            in vec4 position;
+
+            out vec2 vTexCoord;
+            
             void main(void)
             {
-                gl_TexCoord[0] = gl_MultiTexCoord0;
-                gl_FrontColor = gl_Color;
-                gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
+                vTexCoord = texcoord;
+                // gl_FrontColor = color;
+    
+				gl_Position = position;
             }
         );
         
         string fragShaderSrc = STRINGIFY(
+            #version 410 core\n
             uniform sampler2D rtex;
             uniform sampler2D otex;
 
@@ -56,10 +66,13 @@ namespace itg
             uniform vec2 lightPositionOnScreen;
             uniform float lightDirDOTviewDir;
 
+            in vec2 vTexCoord;
+            out vec4 fragColor;
+
             void main(void)
             {
-                vec4 origColor = texture2D(otex, gl_TexCoord[0].st);
-                vec4 raysColor = texture2D(rtex, gl_TexCoord[0].st);
+                vec4 origColor = texture(otex, vTexCoord);
+                vec4 raysColor = texture(rtex, vTexCoord);
 
                 if (lightDirDOTviewDir>0.0){
                     float exposure	= 0.1/float(NUM_SAMPLES);
@@ -68,8 +81,8 @@ namespace itg
                     float weight	= 6.0;
                     float illuminationDecay = 1.0;
 
-                    vec2 deltaTextCoord = vec2( gl_TexCoord[0].st - lightPositionOnScreen);
-                    vec2 textCoo = gl_TexCoord[0].st;
+                    vec2 deltaTextCoord = vec2( vTexCoord - lightPositionOnScreen);
+                    vec2 textCoo = vTexCoord;
                     deltaTextCoord *= 1.0 / float(NUM_SAMPLES) * density;
 
 
@@ -77,21 +90,22 @@ namespace itg
                     for(int i=0; i < NUM_SAMPLES ; i++)
                     {
                         textCoo -= deltaTextCoord;
-                        vec4 tsample = texture2D(rtex, textCoo );
+                        vec4 tsample = texture(rtex, textCoo );
                         tsample *= illuminationDecay * weight;
                         raysColor += tsample;
                         illuminationDecay *= decay;
                     }
                     raysColor *= exposure * lightDirDOTviewDir;
                     float p = 0.3 *raysColor.g + 0.59*raysColor.r + 0.11*raysColor.b;
-                    gl_FragColor = origColor + p;
+                    fragColor = origColor + p;
                 } else {
-                    gl_FragColor = origColor;
+                    fragColor = origColor;
                 }
             }
         );
         shader.setupShaderFromSource(GL_VERTEX_SHADER, vertShaderSrc);
         shader.setupShaderFromSource(GL_FRAGMENT_SHADER, fragShaderSrc);
+		shader.bindDefaults();
         shader.linkProgram();
         
     }
@@ -107,7 +121,8 @@ namespace itg
         shader.setUniform1f("lightDirDOTviewDir", lightDirDOTviewDir);
         
         
-        texturedQuad(0, 0, writeFbo.getWidth(), writeFbo.getHeight());
+        //texturedQuad(0, 0, writeFbo.getWidth(), writeFbo.getHeight());
+		quad.draw(OF_MESH_FILL);
         
         shader.end();
         writeFbo.end();

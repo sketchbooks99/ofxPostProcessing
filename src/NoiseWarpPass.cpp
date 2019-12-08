@@ -36,13 +36,30 @@ namespace itg
     NoiseWarpPass::NoiseWarpPass(const ofVec2f& aspect, bool arb, float frequency, float amplitude, float speed) :
         frequency(frequency), amplitude(amplitude), speed(speed), RenderPass(aspect, arb, "noisewarp")
     {
+
+        string vertShaderSrc = STRINGIFY(
+                                         #version 410 core\n
+                                         in vec2 texcoord;
+                                         in vec4 position;
+                                         uniform mat4 modelViewProjectionMatrix;
+                                         out vec2 vTexCoord;
+                                         void main() {
+                                             gl_Position = position;
+                                             vTexCoord = texcoord;
+                                         }
+        );
+
         string fragShaderSrc = STRINGIFY(
+            #version 410 core\n
             uniform sampler2D tex;
 
             uniform float frequency;
             uniform float amplitude;
             uniform float time;
             uniform float speed;
+
+            in vec2 vTexCoord;
+            out vec4 fragColor;
 
             //
             // Description : Array and textureless GLSL 2D/3D/4D simplex
@@ -150,15 +167,17 @@ namespace itg
                                          
             void main()
             {
-                vec2 texCoords = gl_TexCoord[0].st + vec2(
-                    amplitude * (snoise(vec3(frequency * gl_TexCoord[0].s, frequency * gl_TexCoord[0].t, speed * time))),
-                    amplitude * (snoise(vec3(frequency * gl_TexCoord[0].s + 17.0, frequency * gl_TexCoord[0].t, speed * time)))
+                vec2 texCoords = vTexCoord + vec2(
+                    amplitude * (snoise(vec3(frequency * vTexCoord.s, frequency * vTexCoord.t, speed * time))),
+                    amplitude * (snoise(vec3(frequency * vTexCoord.s + 17.0, frequency * vTexCoord.t, speed * time)))
                 );
-                gl_FragColor = texture2D(tex, texCoords);
+                fragColor = texture(tex, texCoords);
             }
         );
-        
+
+        shader.setupShaderFromSource(GL_VERTEX_SHADER, vertShaderSrc);
         shader.setupShaderFromSource(GL_FRAGMENT_SHADER, fragShaderSrc);
+		shader.bindDefaults();
         shader.linkProgram();
 #ifdef _ITG_TWEAKABLE
         addParameter("amplitude", this->amplitude, "min=0 max=10");
@@ -177,8 +196,9 @@ namespace itg
         shader.setUniform1f("amplitude", amplitude);
         shader.setUniform1f("speed", speed);
         
-        texturedQuad(0, 0, writeFbo.getWidth(), writeFbo.getHeight());
-        
+        //texturedQuad(0, 0, writeFbo.getWidth(), writeFbo.getHeight());
+		quad.draw(OF_MESH_FILL);
+
         shader.end();
         writeFbo.end();
     }

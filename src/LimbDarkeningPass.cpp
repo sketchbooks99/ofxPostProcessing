@@ -41,8 +41,20 @@ namespace itg
                                          const ofVec3f & endColor) :
     radialScale(radialScale), brightness(brightness), startColor(startColor), endColor(endColor), RenderPass(aspect, arb, "limbdarkening")
     {
-        
+        string vertShaderSrc = STRINGIFY(
+                                         #version 410 core\n
+                                         in vec2 texcoord;
+                                         in vec4 position;
+                                         uniform mat4 modelViewProjectionMatrix;
+                                         out vec2 vTexCoord;
+                                         void main() {
+                                             gl_Position = position;
+                                             vTexCoord = texcoord;
+                                         }
+        );
+
         string fragShaderSrc = STRINGIFY(
+            #version 410 core\n
             uniform sampler2D myTexture;
             uniform float fAspect;
 
@@ -51,8 +63,11 @@ namespace itg
                                          
             uniform float radialScale;//0. - 1.0 - 2.0
             uniform float brightness;//0.-1.0, deff:2.5
+
+            in vec2 vTexCoord;
+            out vec4 fragColor;
             void main() {
-                vec2 vUv = gl_TexCoord[0].st;
+                vec2 vUv = vTexCoord;
                 vec2 vSunPositionScreenSpace = vec2(0.5);
                 
                 vec2 diff = vUv - vSunPositionScreenSpace;
@@ -66,13 +81,15 @@ namespace itg
                 
                 vec3 color = mix( startColor, endColor, 1.0 - prop );
 
-                vec4 base = texture2D(myTexture, vUv);
-                gl_FragColor = vec4(base.xyz * color, 1.0);
+                vec4 base = texture(myTexture, vUv);
+                fragColor = vec4(base.xyz * color, 1.0);
 
             }
         );
         
-        shader.setupShaderFromSource(GL_FRAGMENT_SHADER, "#version 110\n" + fragShaderSrc);
+        shader.setupShaderFromSource(GL_VERTEX_SHADER, vertShaderSrc);
+        shader.setupShaderFromSource(GL_FRAGMENT_SHADER, fragShaderSrc);
+		shader.bindDefaults();
         shader.linkProgram();
 
     }
@@ -89,7 +106,8 @@ namespace itg
         shader.setUniform1f("radialScale", 1.2);
         shader.setUniform1f("brightness", 2.5);
         
-        texturedQuad(0, 0, writeFbo.getWidth(), writeFbo.getHeight());
+        //texturedQuad(0, 0, writeFbo.getWidth(), writeFbo.getHeight());
+		quad.draw(OF_MESH_FILL);
         
         shader.end();
         writeFbo.end();

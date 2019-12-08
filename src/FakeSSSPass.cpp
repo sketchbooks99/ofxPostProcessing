@@ -50,9 +50,17 @@ namespace itg
     {
         baseColor.set(1.0, 1.0, 1.0, 1.0);
         
-        string vertShaderSrc = 
+        string vertShaderSrc =
+        "#version 410 core\n" 
+        "uniform mat4 modelViewProjectionMatrix;"
         "uniform vec3 LightPosition;"
-        "varying vec3 worldNormal, eyeVec, lightVec, vertPos, lightPos;"
+        "in vec2 texcoord;"
+        "in vec4 position;"
+        "in vec3 normal;"
+
+
+        "out vec3 worldNormal, eyeVec, lightVec, vertPos, lightPos;"
+        "out vec2 vTexCoord;"
 
         "void subScatterVS(vec4 ecVert){"
             "lightVec = LightPosition - ecVert.xyz;"
@@ -63,14 +71,15 @@ namespace itg
 
 
         "void main(){"
-            "worldNormal = gl_NormalMatrix * gl_Normal;"
-            "vec4 ecPos = gl_ModelViewProjectionMatrix * gl_Vertex;"
+            "worldNormal = gl_NormalMatrix * normal;"
+            "vec4 ecPos = position;"
             "subScatterVS(ecPos);"
             "gl_Position = ecPos;"
-            "gl_TexCoord[0] = gl_TextureMatrix[0] * gl_MultiTexCoord0;"
+            "vTexCoord = texcoord;"
         "}";
         
         string fragShaderSrc =
+        "#version 410 core\n"
         "uniform float MaterialThickness;"
         "uniform vec3 ExtinctionCoefficient;"
         "uniform vec4 LightColor;"
@@ -81,7 +90,10 @@ namespace itg
         "uniform float AttenuationOffset;"
         "uniform sampler2D Texture;"
 
-        "varying vec3 worldNormal, eyeVec, lightVec, vertPos, lightPos;"
+        "in vec3 worldNormal, eyeVec, lightVec, vertPos, lightPos;"
+        "in vec2 vTexCoord;"
+
+        "out vec4 fragColor;"
 
         "float halfLambert(vec3 vect1, vec3 vect2){"
             "float product = dot(vect1,vect2);"
@@ -94,14 +106,14 @@ namespace itg
         "}"
 
         "vec4 subScatterFS(){"
-            "vec2 vUv = gl_TexCoord[0].st;"
+            "vec2 vUv = vTexCoord;"
             "float attenuation = 10.0 * (1.0 / distance(lightPos,vertPos)) + AttenuationOffset;"
             "vec3 eVec = normalize(eyeVec);"
             "vec3 lVec = normalize(lightVec);"
             "vec3 wNorm = normalize(worldNormal);"
 
             "vec4 dotLN = vec4(halfLambert(lVec,wNorm) * attenuation);"
-            "dotLN *= texture2D(Texture, gl_TexCoord[0].xy);"
+            "dotLN *= texture(Texture, vTexCoord);"
             "dotLN *= BaseColor;"
 
             "vec3 indirectLightComponent = vec3(MaterialThickness * max(0.0,dot(-wNorm,lVec)));"
@@ -110,7 +122,7 @@ namespace itg
             "indirectLightComponent.r *= ExtinctionCoefficient.r;"
             "indirectLightComponent.g *= ExtinctionCoefficient.g;"
             "indirectLightComponent.b *= ExtinctionCoefficient.b;"
-            "indirectLightComponent.rgb *= texture2D(Texture, gl_TexCoord[0].xy).rgb;"
+            "indirectLightComponent.rgb *= texture(Texture, vTexCoord).rgb;"
             "vec3 rim = vec3(1.0 - max(0.0,dot(wNorm,eVec)));"
             "rim *= rim;"
             "rim *= max(0.0,dot(wNorm,lVec)) * SpecColor.rgb;"
@@ -125,11 +137,12 @@ namespace itg
 
 
         "void main(){"
-            "gl_FragColor = subScatterFS();"
+            "fragColor = subScatterFS();"
         "}";
         
         shader.setupShaderFromSource(GL_VERTEX_SHADER, vertShaderSrc);
         shader.setupShaderFromSource(GL_FRAGMENT_SHADER, fragShaderSrc);
+		shader.bindDefaults();
         shader.linkProgram();
         
     }
@@ -152,7 +165,8 @@ namespace itg
         shader.setUniform1f("RimScalar", rimScale);
         shader.setUniform1f("AttenuationOffset", attenuationOffset);
         
-        texturedQuad(0, 0, writeFbo.getWidth(), writeFbo.getHeight());
+        //texturedQuad(0, 0, writeFbo.getWidth(), writeFbo.getHeight());
+		quad.draw(OF_MESH_FILL);
         
         shader.end();
         writeFbo.end();

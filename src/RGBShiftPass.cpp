@@ -37,25 +37,41 @@ namespace itg
     RGBShiftPass::RGBShiftPass(const ofVec2f& aspect, bool arb, float amount, float angle) :
         amount(amount), angle(angle), RenderPass(aspect, arb, "RGBShift")
     {
-        
+        string vertShaderSrc = STRINGIFY(
+                                         #version 410 core\n
+                                         in vec2 texcoord;
+                                         in vec4 position;
+                                         uniform mat4 modelViewProjectionMatrix;
+                                         out vec2 vTexCoord;
+                                         void main() {
+                                             gl_Position = position;
+                                             vTexCoord = texcoord;
+                                         }
+        );
+
         string fragShaderSrc = STRINGIFY(
+                                         #version 410 core\n
                                          uniform sampler2D tDiffuse;
                                          uniform float amount;
                                          uniform float angle;
+
+                                         in vec2 vTexCoord;
+                                         out vec4 fragColor;
                         
                                          void main() {
-                                         vec2 vUv = gl_TexCoord[0].st;
+                                         vec2 vUv = vTexCoord;
                                          vec2 offset = amount * vec2( cos(angle), sin(angle));
-                                         vec4 cr = texture2D(tDiffuse, vUv + offset);
-                                         vec4 cga = texture2D(tDiffuse, vUv);
-                                         vec4 cb = texture2D(tDiffuse, vUv - offset);
-                                         gl_FragColor = vec4(cr.r, cga.g, cb.b, cga.a);
+                                         vec4 cr = texture(tDiffuse, vUv + offset);
+                                         vec4 cga = texture(tDiffuse, vUv);
+                                         vec4 cb = texture(tDiffuse, vUv - offset);
+                                         fragColor = vec4(cr.r, cga.g, cb.b, cga.a);
                                          
                                          }
         );
         
-    
+        shader.setupShaderFromSource(GL_VERTEX_SHADER, vertShaderSrc);
         shader.setupShaderFromSource(GL_FRAGMENT_SHADER, fragShaderSrc);
+		shader.bindDefaults();
         shader.linkProgram();
         
     }
@@ -72,7 +88,8 @@ namespace itg
         shader.setUniform1f("amount", amount);
         shader.setUniform1f("angle", angle);
         
-        texturedQuad(0, 0, writeFbo.getWidth(), writeFbo.getHeight());
+        //texturedQuad(0, 0, writeFbo.getWidth(), writeFbo.getHeight());
+		quad.draw(OF_MESH_FILL);
         
         shader.end();
         writeFbo.end();

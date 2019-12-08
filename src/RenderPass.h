@@ -83,6 +83,8 @@ namespace itg
         ofVec2f aspect;
         
         bool arb;
+
+		ofVboMesh quad;
     
     private:
 #ifndef _ITG_TWEAKABLE

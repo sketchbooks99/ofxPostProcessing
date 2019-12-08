@@ -37,13 +37,27 @@ namespace itg
     BleachBypassPass::BleachBypassPass(const ofVec2f& aspect, bool arb, float opacity) :
         opacity(opacity), RenderPass(aspect, arb, "bleachbypass")
     {
-        
+        string vertShaderSrc = STRINGIFY(
+                                         #version 410 core\n
+                                         in vec2 texcoord;
+                                         in vec4 position;
+                                         uniform mat4 modelViewProjectionMatrix;
+                                         out vec2 vTexCoord;
+                                         void main() {
+                                             gl_Position = position;
+                                             vTexCoord = texcoord;
+                                         }
+        );
+
         string fragShaderSrc = STRINGIFY(
+                                         #version 410 core\n
                                          uniform float opacity;
                                          uniform sampler2D tDiffuse;
+
+                                         out vec4 fragColor;
                                          void main() {
-                                             vec2 vUv = gl_TexCoord[0].st;
-                                             vec4 base = texture2D( tDiffuse, vUv );
+                                             vec2 vUv = vTexCoord;
+                                             vec4 base = texture( tDiffuse, vUv );
                                              
                                              vec3 lumCoeff = vec3( 0.25, 0.65, 0.1 );
                                              float lum = dot( lumCoeff, base.rgb );
@@ -60,12 +74,13 @@ namespace itg
                                              vec3 mixRGB = A2 * newColor.rgb;
                                              mixRGB += ( ( 1.0 - A2 ) * base.rgb );
                                              
-                                             gl_FragColor = vec4( mixRGB, base.a );
+                                             fragColor = vec4( mixRGB, base.a );
                                              
                                          }
         );
-        
+        shader.setupShaderFromSource(GL_VERTEX_SHADER, vertShaderSrc);
         shader.setupShaderFromSource(GL_FRAGMENT_SHADER, fragShaderSrc);
+		shader.bindDefaults();
         shader.linkProgram();
         
     }
@@ -80,7 +95,7 @@ namespace itg
         shader.setUniformTexture("tDiffuse", readFbo.getTexture(), 0);
         shader.setUniform1f("opacity", opacity);
         
-        texturedQuad(0, 0, writeFbo.getWidth(), writeFbo.getHeight());
+		quad.draw(OF_MESH_FILL);
         
         shader.end();
         writeFbo.end();

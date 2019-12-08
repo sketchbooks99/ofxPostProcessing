@@ -36,13 +36,29 @@ namespace itg
     KaleidoscopePass::KaleidoscopePass(const ofVec2f& aspect, bool arb, float segments) :
         segments(segments), RenderPass(aspect, arb, "kaleido")
     {
+        string vertShaderSrc = STRINGIFY(
+                                         #version 410 core\n
+                                         in vec2 texcoord;
+                                         in vec4 position;
+                                         uniform mat4 modelViewProjectionMatrix;
+                                         out vec2 vTexCoord;
+                                         void main() {
+											 gl_Position = position;
+                                             vTexCoord = texcoord;
+                                         }
+        );
+
         string fragShaderSrc = STRINGIFY(
+            #version 410 core\n
             uniform sampler2D tex;
             uniform float segments;
+
+            in vec2 vTexCoord;
+            out vec4 fragColor;
              
             void main()
             {
-                vec2 uv = gl_TexCoord[0].st;
+                vec2 uv = vTexCoord;
                 vec2 normed = 2.0 * uv - 1.0;
                 float r = length(normed);
                 float theta = atan(normed.y / abs(normed.x));
@@ -50,11 +66,13 @@ namespace itg
                 
                 vec2 newUv = (vec2(r * cos(theta), r * sin(theta)) + 1.0) / 2.0;
                  
-                gl_FragColor = texture2D(tex, newUv);
+                fragColor = texture(tex, newUv);
             }
         );
-        
+
+        shader.setupShaderFromSource(GL_VERTEX_SHADER, vertShaderSrc);
         shader.setupShaderFromSource(GL_FRAGMENT_SHADER, fragShaderSrc);
+		shader.bindDefaults();
         shader.linkProgram();
 #ifdef _ITG_TWEAKABLE
         addParameter("segs", this->segments, "min=-20 max=20");
@@ -70,7 +88,8 @@ namespace itg
         shader.setUniformTexture("tex", readFbo.getTexture(), 0);
         shader.setUniform1f("segments", segments);
         
-        texturedQuad(0, 0, writeFbo.getWidth(), writeFbo.getHeight());
+        //texturedQuad(0, 0, writeFbo.getWidth(), writeFbo.getHeight());
+		quad.draw(OF_MESH_FILL);
         
         shader.end();
         writeFbo.end();

@@ -35,31 +35,32 @@ void ofApp::setup()
 void ofApp::update()
 {
     ofSetWindowTitle(ofToString(ofGetFrameRate()));
+
+	// setup gl state
+	ofEnableDepthTest();
+	light.enable();
+
+	// begin scene to post process
+	post.begin(cam);
+
+	// draw boxes
+	for (unsigned i = 0; i < posns.size(); ++i)
+	{
+		ofSetColor(cols[i]);
+		ofPushMatrix();
+		ofTranslate(posns[i]);
+		boxMesh.draw();
+		ofPopMatrix();
+	}
+
+	ofDrawAxis(100);
+
+	// end scene and draw
+	post.end();
 }
 
 void ofApp::draw()
 {
-    // setup gl state
-    ofEnableDepthTest();
-    light.enable();
-    
-    // begin scene to post process
-    post.begin(cam);
-    
-    // draw boxes
-    for (unsigned i = 0; i < posns.size(); ++i)
-    {
-        ofSetColor(cols[i]);
-        ofPushMatrix();
-        ofTranslate(posns[i]);
-        boxMesh.draw();
-        ofPopMatrix();
-    }
-    
-    ofDrawAxis(100);
-    
-    // end scene and draw
-    post.end();
     
     // draw help
     ofSetColor(0, 255, 255);

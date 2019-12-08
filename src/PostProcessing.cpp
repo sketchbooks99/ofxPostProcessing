@@ -74,6 +74,7 @@ namespace itg
     void PostProcessing::begin()
     {
         raw.begin(OF_FBOMODE_NODEFAULTS);
+        raw.begin();
         
         ofMatrixMode(OF_MATRIX_PROJECTION);
         ofPushMatrix();
@@ -95,7 +96,8 @@ namespace itg
         cam.begin();
         cam.end();
         
-        raw.begin(OF_FBOMODE_NODEFAULTS);
+         raw.begin(OF_FBOMODE_NODEFAULTS);
+        //raw.begin();
         
         ofMatrixMode(OF_MATRIX_PROJECTION);
         ofPushMatrix();
@@ -105,7 +107,7 @@ namespace itg
         ofPushMatrix();
         ofLoadMatrix(cam.getModelViewMatrix());
         
-        ofViewport(0, 0, raw.getWidth(), raw.getHeight());
+        //ofViewport(0, 0, raw.getWidth(), raw.getHeight());
         
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
         
@@ -118,7 +120,7 @@ namespace itg
         glPopAttrib();
         ofPopStyle();
         
-        ofViewport(0, 0, ofGetWidth(), ofGetHeight());
+        //ofViewport(0, 0, ofGetWidth(), ofGetHeight());
         
         ofMatrixMode(OF_MATRIX_PROJECTION);
         ofPopMatrix();
@@ -128,14 +130,15 @@ namespace itg
         
         raw.end();
         
-        ofPushStyle();
+        /*ofPushStyle();
         glPushAttrib(GL_ENABLE_BIT);
         glDisable(GL_LIGHTING);
         ofSetColor(255, 255, 255);
         process();
         if (autoDraw) draw();
         glPopAttrib();
-        ofPopStyle();
+        ofPopStyle();*/
+		process();
     }
     
     void PostProcessing::debugDraw()
@@ -159,8 +162,12 @@ namespace itg
             ofScale(1, -1, 1);
         }
         else glTranslatef(x, y, 0);
-        if (numProcessedPasses == 0) raw.draw(0, 0, w, h);
-        else pingPong[currentReadFbo].draw(0, 0, w, h);
+		if (numProcessedPasses == 0) {
+			raw.draw(0, 0, w, h);
+		}
+		else {
+			pingPong[currentReadFbo].draw(0, 0, w, h);
+		}
         if (flip) ofPopMatrix();
     }
     

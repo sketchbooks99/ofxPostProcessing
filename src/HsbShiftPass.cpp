@@ -36,11 +36,27 @@ namespace itg
     HsbShiftPass::HsbShiftPass(const ofVec2f& aspect, bool arb, float hueShift, float saturationShift, float brightnessShift) :
         hueShift(hueShift), saturationShift(saturationShift), brightnessShift(brightnessShift), RenderPass(aspect, arb, "hsbshift")
     {
+        string vertShaderSrc = STRINGIFY(
+                                         #version 410 core\n
+                                         in vec2 texcoord;
+                                         in vec4 position;
+                                         uniform mat4 modelViewProjectionMatrix;
+                                         out vevc2 vTexCoord;
+                                         void main() {
+											 gl_Position = position;
+                                             vTexCoord = texcoord;
+                                         }
+        );
+        
         string fragShaderSrc = STRINGIFY(
+            #version 410 core\n
             uniform sampler2D tex;
             uniform float hueShift;
             uniform float saturationShift;
             uniform float brightnessShift;
+
+            in vec2 vTexCoord;
+            out vec4 fragColor;
                                          
             // https://love2d.org/wiki/HSV_color
             vec3 hsbToRgb(vec3 c) { return mix(vec3(1.),clamp((abs(fract(c.x+vec3(3.,2.,1.)/3.)*6.-3.)-1.),0.,1.),c.y)*c.z; }
@@ -58,13 +74,15 @@ namespace itg
                                          
             void main()
             {
-                vec3 hsb = rgbToHsb(texture2D(tex, gl_TexCoord[0].st).rgb);
+                vec3 hsb = rgbToHsb(texture(tex, vTexCoord).rgb);
                 vec3 rgb = hsbToRgb(vec3(hsb.x + hueShift, hsb.y + saturationShift, hsb.z + brightnessShift));
-                gl_FragColor = vec4(rgb, 1.0);
+                fragColor = vec4(rgb, 1.0);
             }
         );
         
+        shader.setupShaderFromSource(GL_VERTEX_SHADER, vertShaderSrc);
         shader.setupShaderFromSource(GL_FRAGMENT_SHADER, fragShaderSrc);
+		shader.bindDefaults();
         shader.linkProgram();
     }
     
@@ -77,7 +95,8 @@ namespace itg
         shader.setUniform1f("saturationShift", saturationShift);
         shader.setUniform1f("brightnessShift", brightnessShift);
         
-        texturedQuad(0, 0, writeFbo.getWidth(), writeFbo.getHeight());
+        //texturedQuad(0, 0, writeFbo.getWidth(), writeFbo.getHeight());
+		quad.draw(OF_MESH_FILL);
         
         shader.end();
         writeFbo.end();

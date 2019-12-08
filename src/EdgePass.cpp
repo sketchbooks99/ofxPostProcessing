@@ -36,11 +36,28 @@ namespace itg
     EdgePass::EdgePass(const ofVec2f& aspect, bool arb) :
         RenderPass(aspect, arb, "edge"), hue(0.5f), saturation(0.f)
     {
+        string vertShaderSrc = STRINGIFY(
+                                         #version 410 core\n
+                                         in vec2 texcoord;
+                                         in vec4 position;
+                                         uniform mat4 modelViewProjectionMatrix;
+                                         out vec2 vTexCoord;
+                                         void main() {
+                                            
+                                             gl_Position = position;
+                                             vTexCoord = texcoord;
+                                         }
+        );
+
         string fragShaderSrc = STRINGIFY(
-            uniform SAMPLER_TYPE tex;
+			#version 410 core\n
+            uniform sampler2D tex;
             uniform vec2 aspect;
             uniform float hue;
             uniform float saturation;
+
+            in vec2 vTexCoord;
+            out vec4 fragColor;
                                          
             vec2 texel = vec2(1.0 / aspect.x, 1.0 / aspect.y);
 
@@ -61,15 +78,15 @@ namespace itg
             {
                 mat3 I;
                 float cnv[9];
-                vec3 sample;
+                vec3 samp;
             
                 /* fetch the 3x3 neighbourhood and use the RGB vector's length as intensity value */
                 for (int i=0; i<3; i++)
                 {
                     for (int j=0; j<3; j++)
                     {
-                        sample = TEXTURE_FN(tex, gl_TexCoord[0].st + texel * vec2(i-1.0,j-1.0)).rgb;
-                        I[i][j] = length(sample); 
+                        samp = texture(tex, vTexCoord + texel * vec2(i-1.0,j-1.0)).rgb;
+                        I[i][j] = length(samp); 
                     }
                 }
 
@@ -83,27 +100,28 @@ namespace itg
                 float M = (cnv[0] + cnv[1]) + (cnv[2] + cnv[3]);
                 float S = (cnv[4] + cnv[5]) + (cnv[6] + cnv[7]) + (cnv[8] + M); 
 
-                gl_FragColor = vec4(hsv(hue, saturation, sqrt(M/S)), 1.0);
+                fragColor = vec4(hsv(hue, saturation, sqrt(M/S)), 1.0);
             }
         );
         
-        ostringstream oss;
-        oss << "#version 120" << endl;
-        if (arb)
-        {
-            oss << "#define SAMPLER_TYPE sampler2DRect" << endl;
-            oss << "#define TEXTURE_FN texture2DRect" << endl;
-            oss << "#extension GL_ARB_texture_rectangle : enable" << endl;
-            oss << fragShaderSrc;
-        }
-        else
-        {
-            oss << "#define SAMPLER_TYPE sampler2D" << endl;
-            oss << "#define TEXTURE_FN texture2D" << endl;
-            oss << fragShaderSrc;
-        }
+        /*ostringstream oss;
+        oss << "#version 410 core\n" << endl;
+		oss << fragShaderSrc;*/
+        // if (arb)
+        // {
+        //     oss << "#define SAMPLER_TYPE sampler2DRect" << endl;
+             //oss << "#extension GL_ARB_texture_rectangle : enable" << endl;
+        //     oss << fragShaderSrc;
+        // }
+        // else
+        // {
+        //     oss << "#define SAMPLER_TYPE sampler2D" << endl;
+        //     oss << fragShaderSrc;
+        // }
         
-        shader.setupShaderFromSource(GL_FRAGMENT_SHADER, oss.str());
+        shader.setupShaderFromSource(GL_VERTEX_SHADER, vertShaderSrc);
+        shader.setupShaderFromSource(GL_FRAGMENT_SHADER, fragShaderSrc);
+		shader.bindDefaults();
         shader.linkProgram();
 #ifdef _ITG_TWEAKABLE
         addParameter("hue", this->hue, "min=0 max=1");
@@ -122,8 +140,9 @@ namespace itg
         shader.setUniform1f("hue", hue);
         shader.setUniform1f("saturation", saturation);
         
-        if (arb) texturedQuad(0, 0, writeFbo.getWidth(), writeFbo.getHeight(), readFbo.getWidth(), readFbo.getHeight());
-        else texturedQuad(0, 0, writeFbo.getWidth(), writeFbo.getHeight());
+        /*if (arb) texturedQuad(0, 0, writeFbo.getWidth(), writeFbo.getHeight(), readFbo.getWidth(), readFbo.getHeight());
+        else texturedQuad(0, 0, writeFbo.getWidth(), writeFbo.getHeight());*/
+		quad.draw(OF_MESH_FILL);
         
         shader.end();
         

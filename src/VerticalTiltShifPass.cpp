@@ -36,32 +36,50 @@ namespace itg
     VerticalTiltShifPass::VerticalTiltShifPass(const ofVec2f& aspect, bool arb) :
         RenderPass(aspect, arb, "verticaltiltshift"), v(2.0/512.0), r(0.5)
     {
+        string vertShaderSrc = STRINGIFY(
+                                         #version 410 core\n
+                                         in vec2 texcoord;
+                                         in vec4 position;
+                                         uniform mat4 modelViewProjectionMatrix;
+                                         out vec2 vTexCoord;
+                                         void main() {
+                                             gl_Position = position;
+                                             vTexCoord = texcoord;
+                                         }
+        );
+
         string fragShaderSrc = STRINGIFY(
+            #version 410 core\n
             uniform sampler2D tDiffuse;
             uniform float v;
             uniform float r;
 
+            in vec2 vTexCoord;
+            out vec4 fragColor;
+
             void main() {
-                vec2 vUv = gl_TexCoord[0].st;
+                vec2 vUv = vTexCoord;
                 vec4 sum = vec4( 0.0 );
 
                 float vv = v * abs( r - vUv.y );
 
-                sum += texture2D( tDiffuse, vec2( vUv.x, vUv.y - 4.0 * vv ) ) * 0.051;
-                sum += texture2D( tDiffuse, vec2( vUv.x, vUv.y - 3.0 * vv ) ) * 0.0918;
-                sum += texture2D( tDiffuse, vec2( vUv.x, vUv.y - 2.0 * vv ) ) * 0.12245;
-                sum += texture2D( tDiffuse, vec2( vUv.x, vUv.y - 1.0 * vv ) ) * 0.1531;
-                sum += texture2D( tDiffuse, vec2( vUv.x, vUv.y ) ) * 0.1633;
-                sum += texture2D( tDiffuse, vec2( vUv.x, vUv.y + 1.0 * vv ) ) * 0.1531;
-                sum += texture2D( tDiffuse, vec2( vUv.x, vUv.y + 2.0 * vv ) ) * 0.12245;
-                sum += texture2D( tDiffuse, vec2( vUv.x, vUv.y + 3.0 * vv ) ) * 0.0918;
-                sum += texture2D( tDiffuse, vec2( vUv.x, vUv.y + 4.0 * vv ) ) * 0.051;
+                sum += texture( tDiffuse, vec2( vUv.x, vUv.y - 4.0 * vv ) ) * 0.051;
+                sum += texture( tDiffuse, vec2( vUv.x, vUv.y - 3.0 * vv ) ) * 0.0918;
+                sum += texture( tDiffuse, vec2( vUv.x, vUv.y - 2.0 * vv ) ) * 0.12245;
+                sum += texture( tDiffuse, vec2( vUv.x, vUv.y - 1.0 * vv ) ) * 0.1531;
+                sum += texture( tDiffuse, vec2( vUv.x, vUv.y ) ) * 0.1633;
+                sum += texture( tDiffuse, vec2( vUv.x, vUv.y + 1.0 * vv ) ) * 0.1531;
+                sum += texture( tDiffuse, vec2( vUv.x, vUv.y + 2.0 * vv ) ) * 0.12245;
+                sum += texture( tDiffuse, vec2( vUv.x, vUv.y + 3.0 * vv ) ) * 0.0918;
+                sum += texture( tDiffuse, vec2( vUv.x, vUv.y + 4.0 * vv ) ) * 0.051;
 
-                gl_FragColor = sum;
+                fragColor = sum;
             }
         );
         
+        shader.setupShaderFromSource(GL_VERTEX_SHADER, vertShaderSrc);
         shader.setupShaderFromSource(GL_FRAGMENT_SHADER, fragShaderSrc);
+		shader.bindDefaults();
         shader.linkProgram();
 #ifdef _ITG_TWEAKABLE
         addParameter("f", this->v, "min=0 max=1");
@@ -78,7 +96,8 @@ namespace itg
         shader.setUniform1f("v", v);
         shader.setUniform1f("r", r);
         
-        texturedQuad(0, 0, writeFbo.getWidth(), writeFbo.getHeight());
+        //texturedQuad(0, 0, writeFbo.getWidth(), writeFbo.getHeight());
+		quad.draw(OF_MESH_FILL);
         
         shader.end();
         writeFbo.end();

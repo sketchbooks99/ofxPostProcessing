@@ -37,8 +37,23 @@ namespace itg
     SSAOPass::SSAOPass(const ofVec2f& aspect, bool arb, float cameraNear, float cameraFar, float fogNear, float fogFar, bool fogEnabled, bool onlyAO, float aoClamp, float lumInfluence) :
         cameraNear(cameraNear), cameraFar(cameraFar), fogNear(fogNear), fogFar(fogFar), fogEnabled(fogEnabled), onlyAO(onlyAO), aoClamp(aoClamp), lumInfluence(lumInfluence), RenderPass(aspect, arb, "SSAO")
     {
-        
+        string vertShaderSrc = STRINGIFY(
+                                         #version 410 core\n
+                                         in vec2 texcoord;
+                                         in vec4 position;
+                                         uniform mat4 modelViewProjectionMatrix;
+                                         out vec2 vTexCoord;
+                                         void main() {
+                                             gl_Position = position;
+                                             vTexCoord = texcoord;
+                                         }
+        );
+
         string fragShaderSrc = STRINGIFY(
+            #version 410 core\n
+            in vec2 vTexCoord;
+            out vec4 fragColor;
+
             uniform float cameraNear;
             uniform float cameraFar;
 
@@ -119,8 +134,8 @@ namespace itg
             }
 
             float doFog() {
-                vec2 vUv = gl_TexCoord[0].st;
-                float zdepth = unpackDepth( texture2D( tDepth, vUv ) );
+                vec2 vUv = vTexCoord;
+                float zdepth = unpackDepth( texture( tDepth, vUv ) );
                 float depth = -cameraFar * cameraNear / ( zdepth * cameraFarMinusNear - cameraFar );
 
                 return smoothstep( fogNear, fogFar, depth );
@@ -129,8 +144,8 @@ namespace itg
 
             float readDepth( const in vec2 coord ) {
 
-                //return ( 2.0 * cameraNear ) / ( cameraFar + cameraNear - unpackDepth( texture2D( tDepth, coord ) ) * ( cameraFar - cameraNear ) );,
-                return cameraCoef / ( cameraFarPlusNear - unpackDepth( texture2D( tDepth, coord ) ) * cameraFarMinusNear );
+                //return ( 2.0 * cameraNear ) / ( cameraFar + cameraNear - unpackDepth( texture( tDepth, coord ) ) * ( cameraFar - cameraNear ) );,
+                return cameraCoef / ( cameraFarPlusNear - unpackDepth( texture( tDepth, coord ) ) * cameraFarMinusNear );
 
 
             }
@@ -159,7 +174,7 @@ namespace itg
             }
 
             float calcAO( float depth, float dw, float dh ) {
-                vec2 vUv = gl_TexCoord[0].st;
+                vec2 vUv = vTexCoord;
                 float dd = radius - depth * radius;
                 vec2 vv = vec2( dw, dh );
                 vec2 coord1 = vUv + dd * vv;
@@ -179,7 +194,7 @@ namespace itg
                 return temp1;
             }
             void main() {
-                vec2 vUv = gl_TexCoord[0].st;
+                vec2 vUv = vTexCoord;
                 vec2 noise = rand( vUv );
                 float depth = readDepth( vUv );
                 float tt = clamp( depth, aoClamp, 1.0 );
@@ -204,7 +219,7 @@ namespace itg
                 if ( fogEnabled ) {
                  ao = mix( ao, 1.0, doFog() );
                 }
-                vec3 color = texture2D( tDiffuse, vUv ).rgb;
+                vec3 color = texture( tDiffuse, vUv ).rgb;
                 vec3 lumcoeff = vec3( 0.299, 0.587, 0.114 );
                 float lum = dot( color.rgb, lumcoeff );
                 vec3 luminance = vec3( lum );
@@ -212,12 +227,13 @@ namespace itg
                 if ( onlyAO ) {
                     final = onlyAOColor * vec3( mix( vec3( ao ), vec3( 1.0 ), luminance * lumInfluence ) );
                 }
-                gl_FragColor = vec4( final, 1.0 );
+                fragColor = vec4( final, 1.0 );
             }
         );
         
-    
+        shader.setupShaderFromSource(GL_VERTEX_SHADER, vertShaderSrc);
         shader.setupShaderFromSource(GL_FRAGMENT_SHADER, fragShaderSrc);
+		shader.bindDefaults();
         shader.linkProgram();
         
     }
@@ -242,7 +258,8 @@ namespace itg
         shader.setUniform1f("aoClamp", aoClamp);
         shader.setUniform1f("lumInfluence", lumInfluence);
         
-        texturedQuad(0, 0, writeFbo.getWidth(), writeFbo.getHeight());
+        //texturedQuad(0, 0, writeFbo.getWidth(), writeFbo.getHeight());
+		quad.draw(OF_MESH_FILL);
         
         shader.end();
         writeFbo.end();

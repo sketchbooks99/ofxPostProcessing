@@ -36,7 +36,21 @@ namespace itg
     DofAltPass::DofAltPass(const ofVec2f& aspect, bool arb, float focalDepth, float focalLength, float fStop, bool showFocus) :
         focalDepth(focalDepth), focalLength(focalLength), fStop(fStop), showFocus(showFocus), RenderPass(aspect, arb, "dofalt")
     {
+        string vertShaderSrc = STRINGIFY(
+                                         #version 410 core\n
+                                         in vec2 texcoord;
+                                         in vec4 position;
+                                         uniform mat4 modelViewProjectionMatrix;
+                                         out vec2 vTexCoord;
+                                         void main() {
+                                             
+                                             gl_Position = position;
+                                             vTexCoord = texcoord;
+                                         }
+        );
+
         string fragShaderSrc = STRINGIFY(
+            #version 410 core\n
             /*
              DoF with bokeh GLSL shader v2.4
              by Martins Upitis (martinsh) (devlog-martinsh.blogspot.com)
@@ -79,6 +93,10 @@ namespace itg
              - image thresholding to bring out highlights when image is out of focus
              
              */
+
+            in vec2 vTexCoord;
+
+            out vec4 fragColor;
 
             uniform sampler2D bgl_RenderedTexture;
             uniform sampler2D bgl_DepthTexture;
@@ -214,7 +232,7 @@ namespace itg
                 
                 for( int i=0; i<9; i++ )
                 {
-                    float tmp = texture2D(bgl_DepthTexture, coords + offset[i]).r;
+                    float tmp = texture(bgl_DepthTexture, coords + offset[i]).r;
                     d += tmp * kernel[i];
                 }
                 
@@ -226,9 +244,9 @@ namespace itg
             {
                 vec3 col = vec3(0.0);
                 
-                col.r = texture2D(bgl_RenderedTexture,coords + vec2(0.0,1.0)*texel*fringe*blur).r;
-                col.g = texture2D(bgl_RenderedTexture,coords + vec2(-0.866,-0.5)*texel*fringe*blur).g;
-                col.b = texture2D(bgl_RenderedTexture,coords + vec2(0.866,-0.5)*texel*fringe*blur).b;
+                col.r = texture(bgl_RenderedTexture,coords + vec2(0.0,1.0)*texel*fringe*blur).r;
+                col.g = texture(bgl_RenderedTexture,coords + vec2(-0.866,-0.5)*texel*fringe*blur).g;
+                col.b = texture(bgl_RenderedTexture,coords + vec2(0.866,-0.5)*texel*fringe*blur).b;
                 
                 vec3 lumcoeff = vec3(0.299,0.587,0.114);
                 float lum = dot(col.rgb, lumcoeff);
@@ -277,11 +295,11 @@ namespace itg
             {
                 //scene depth calculation
                 
-                float depth = linearize(texture2D(bgl_DepthTexture,gl_TexCoord[0].xy).x);
+                float depth = linearize(texture(bgl_DepthTexture,vTexCoord).x);
                 
                 if (depthblur)
                 {
-                    depth = linearize(bdepth(gl_TexCoord[0].xy));
+                    depth = linearize(bdepth(vTexCoord));
                 }
                 
                 //focal plane calculation
@@ -290,7 +308,7 @@ namespace itg
                 
                 if (autofocus)
                 {
-                    fDepth = linearize(texture2D(bgl_DepthTexture,focus).x);
+                    fDepth = linearize(texture(bgl_DepthTexture,focus).x);
                 }
                 
                 //dof blur factor calculation
@@ -322,7 +340,7 @@ namespace itg
                 
                 // calculation of pattern for ditering
                 
-                vec2 noise = rand(gl_TexCoord[0].xy)*namount*blur;
+                vec2 noise = rand(vTexCoord)*namount*blur;
                 
                 // getting blur x and y step factor
                 
@@ -335,12 +353,12 @@ namespace itg
                 
                 if(blur < 0.05) //some optimization thingy
                 {
-                    col = texture2D(bgl_RenderedTexture, gl_TexCoord[0].xy).rgb;
+                    col = texture(bgl_RenderedTexture, vTexCoord).rgb;
                 }
                 
                 else
                 {
-                    col = texture2D(bgl_RenderedTexture, gl_TexCoord[0].xy).rgb;
+                    col = texture(bgl_RenderedTexture, vTexCoord).rgb;
                     float s = 1.0;
                     int ringsamples;
                     
@@ -358,7 +376,7 @@ namespace itg
                             { 
                                 p = penta(vec2(pw,ph));
                             }
-                            col += color(gl_TexCoord[0].xy + vec2(pw*w,ph*h),blur)*mix(1.0,(float(i))/(float(rings)),bias)*p;  
+                            col += color(vTexCoord + vec2(pw*w,ph*h),blur)*mix(1.0,(float(i))/(float(rings)),bias)*p;  
                             s += 1.0*mix(1.0,(float(i))/(float(rings)),bias)*p;   
                         }
                     }
@@ -375,12 +393,14 @@ namespace itg
                     col *= vignette();
                 }
                 
-                gl_FragColor.rgb = col;
-                gl_FragColor.a = 1.0;
+                fragColor.rgb = col;
+                fragColor.a = 1.0;
             }
         );
         
+        shader.setupShaderFromSource(GL_VERTEX_SHADER, vertShaderSrc);
         shader.setupShaderFromSource(GL_FRAGMENT_SHADER, fragShaderSrc);
+		shader.bindDefaults();
         shader.linkProgram();	
     }
     
@@ -400,7 +420,8 @@ namespace itg
         shader.setUniform1f("fstop", fStop); //f-stop value
         shader.setUniform1f("showFocus", showFocus); //show debug focus point and focal range (red = focal point, green = focal range)
 
-        texturedQuad(0, 0, writeFbo.getWidth(), writeFbo.getHeight());
+        //texturedQuad(0, 0, writeFbo.getWidth(), writeFbo.getHeight());
+		quad.draw(OF_MESH_FILL);
         
         shader.end();
         writeFbo.end();

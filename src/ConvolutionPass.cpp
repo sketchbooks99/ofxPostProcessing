@@ -40,26 +40,31 @@ namespace itg
         string vertShaderSrc = STRINGIFY(
             uniform vec2 imageIncrement;
             uniform vec2 resolution;
-                                         
-            varying vec2 vUv;
-            varying vec2 scaledImageIncrement;
+            uniform mat4 modelViewProjectionMatrix;
+
+            in vec2 texcoord;    
+            in vec4 position;
+
+            out vec2 vUv;
+            out vec2 scaledImageIncrement;
             
             void main()
             {
-                gl_TexCoord[0] = gl_MultiTexCoord0;
                 scaledImageIncrement = imageIncrement * resolution;
-                vUv = gl_TexCoord[0].st - ( ( KERNEL_SIZE - 1.0 ) / 2.0 ) * scaledImageIncrement;
-                gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
+                vUv = texcoord - ( ( KERNEL_SIZE - 1.0 ) / 2.0 ) * scaledImageIncrement;
+                gl_Position = position;
             }
         );
         
         string fragShaderSrc = STRINGIFY(
             uniform float kernel[KERNEL_SIZE];
-            uniform SAMPLER_TYPE readTex;
+            uniform sampler2D readTex;
             uniform vec2 imageIncrement;
             
-            varying vec2 vUv;
-            varying vec2 scaledImageIncrement;
+            in vec2 vUv;
+            in vec2 scaledImageIncrement;
+
+            out vec4 fragColor;
                                          
             void main()
             {
@@ -69,32 +74,31 @@ namespace itg
                 
                 for( int i = 0; i < KERNEL_SIZE; i++ )
                 {
-                    sum += TEXTURE_FN( readTex, imageCoord ) * kernel[ i ];
+                    sum += texture( readTex, imageCoord ) * kernel[ i ];
                     imageCoord += scaledImageIncrement;
                 }
                 
-                gl_FragColor = sum;
+                fragColor = sum;
             }
         );
         
         ostringstream oss;
-        oss << "#version 120\n#define KERNEL_SIZE " << kernelSize << ".0" << endl << vertShaderSrc;
+        oss << "#version 410 core\n#define KERNEL_SIZE " << kernelSize << ".0" << endl << vertShaderSrc;
         shader.setupShaderFromSource(GL_VERTEX_SHADER, oss.str());
         
         oss.str("");
-        oss << "#version 120\n#define KERNEL_SIZE " << kernelSize << endl;
-        if (arb)
-        {
-            oss << "#define SAMPLER_TYPE sampler2DRect" << endl;
-            oss << "#define TEXTURE_FN texture2DRect" << endl;
-        }
-        else
-        {
-            oss << "#define SAMPLER_TYPE sampler2D" << endl;
-            oss << "#define TEXTURE_FN texture2D" << endl;
-        }
+        oss << "#version 410 core\n#define KERNEL_SIZE " << kernelSize << endl;
+        // if (arb)
+        // {
+        //     oss << "#define SAMPLER_TYPE sampler2DRect" << endl;
+        // }
+        // else
+        // {
+        //     oss << "#define SAMPLER_TYPE sampler2D" << endl;
+        // }
         oss << fragShaderSrc;
         shader.setupShaderFromSource(GL_FRAGMENT_SHADER, oss.str());
+		shader.bindDefaults();
         shader.linkProgram();
         
         // build kernel
@@ -121,8 +125,9 @@ namespace itg
         if (arb) shader.setUniform2f("resolution", readFbo.getWidth(), readFbo.getHeight());
         else shader.setUniform2f("resolution", 1.f, 1.f);
         
-        if (arb) texturedQuad(0, 0, writeFbo.getWidth(), writeFbo.getHeight(), readFbo.getWidth(), readFbo.getHeight());
-        else texturedQuad(0, 0, writeFbo.getWidth(), writeFbo.getHeight());
+        /*if (arb) texturedQuad(0, 0, writeFbo.getWidth(), writeFbo.getHeight(), readFbo.getWidth(), readFbo.getHeight());
+        else texturedQuad(0, 0, writeFbo.getWidth(), writeFbo.getHeight());*/
+		quad.draw(OF_MESH_FILL);
         
         shader.end();
         writeFbo.end();
