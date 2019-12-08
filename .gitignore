@@ -3,3 +3,6 @@
 example/bin
 */*/xcuserdata
 */*/*/xcuserdata
+*.ipch
+*.ilk
+*.db
