@@ -51,7 +51,7 @@ namespace itg
         baseColor.set(1.0, 1.0, 1.0, 1.0);
         
         string vertShaderSrc =
-        "#version 410 core\n" 
+        "#version 150\n" 
         "uniform mat4 modelViewProjectionMatrix;"
         "uniform vec3 LightPosition;"
         "in vec2 texcoord;"
@@ -79,7 +79,7 @@ namespace itg
         "}";
         
         string fragShaderSrc =
-        "#version 410 core\n"
+        "#version 150\n"
         "uniform float MaterialThickness;"
         "uniform vec3 ExtinctionCoefficient;"
         "uniform vec4 LightColor;"

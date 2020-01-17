@@ -38,7 +38,7 @@ namespace itg
         amount(amount), angle(angle), RenderPass(aspect, arb, "RGBShift")
     {
         string vertShaderSrc = STRINGIFY(
-                                         #version 410 core\n
+                                         #version 150\n
                                          in vec2 texcoord;
                                          in vec4 position;
                                          uniform mat4 modelViewProjectionMatrix;
@@ -50,7 +50,7 @@ namespace itg
         );
 
         string fragShaderSrc = STRINGIFY(
-                                         #version 410 core\n
+                                         #version 150\n
                                          uniform sampler2D tDiffuse;
                                          uniform float amount;
                                          uniform float angle;

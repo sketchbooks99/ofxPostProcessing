@@ -33,79 +33,85 @@
 
 namespace itg
 {
-    EdgePass::EdgePass(const ofVec2f& aspect, bool arb) :
+    itg::EdgePass::EdgePass(const ofVec2f& aspect, bool arb) :
         RenderPass(aspect, arb, "edge"), hue(0.5f), saturation(0.f)
     {
-        string vertShaderSrc = STRINGIFY(
-                                         #version 410 core\n
-                                         in vec2 texcoord;
-                                         in vec4 position;
-                                         uniform mat4 modelViewProjectionMatrix;
-                                         out vec2 vTexCoord;
-                                         void main() {
-                                            
-                                             gl_Position = position;
-                                             vTexCoord = texcoord;
-                                         }
-        );
+		
+		string vertShaderSrc = STRINGIFY(
+			#version 150\n
+			in vec2 texcoord;
+			in vec4 position;
+			uniform mat4 modelViewProjectionMatrix;
+			out vec2 vTexCoord;
+			void main() {
 
-        string fragShaderSrc = STRINGIFY(
-			#version 410 core\n
-            uniform sampler2D tex;
-            uniform vec2 aspect;
-            uniform float hue;
-            uniform float saturation;
+				gl_Position = position;
+				vTexCoord = texcoord;
+			}
+		);
 
-            in vec2 vTexCoord;
-            out vec4 fragColor;
-                                         
-            vec2 texel = vec2(1.0 / aspect.x, 1.0 / aspect.y);
+		string fragShaderSrc = STRINGIFY(
+			#version 150\n
+			uniform sampler2D tex;
+			uniform vec2 aspect;
+			uniform float hue;
+			uniform float saturation;
 
-            // hard coded matrix values
-            mat3 G[9] = mat3[]( mat3( 0.3535533845424652, 0, -0.3535533845424652, 0.5, 0, -0.5, 0.3535533845424652, 0, -0.3535533845424652 ),
-                                mat3( 0.3535533845424652, 0.5, 0.3535533845424652, 0, 0, 0, -0.3535533845424652, -0.5, -0.3535533845424652 ),
-                                mat3( 0, 0.3535533845424652, -0.5, -0.3535533845424652, 0, 0.3535533845424652, 0.5, -0.3535533845424652, 0 ),
-                                mat3( 0.5, -0.3535533845424652, 0, -0.3535533845424652, 0, 0.3535533845424652, 0, 0.3535533845424652, -0.5 ),
-                                mat3( 0, -0.5, 0, 0.5, 0, 0.5, 0, -0.5, 0 ),
-                                mat3( -0.5, 0, 0.5, 0, 0, 0, 0.5, 0, -0.5 ),
-                                mat3( 0.1666666716337204, -0.3333333432674408, 0.1666666716337204, -0.3333333432674408, 0.6666666865348816, -0.3333333432674408, 0.1666666716337204, -0.3333333432674408, 0.1666666716337204 ),
-                                mat3( -0.3333333432674408, 0.1666666716337204, -0.3333333432674408, 0.1666666716337204, 0.6666666865348816, 0.1666666716337204, -0.3333333432674408, 0.1666666716337204, -0.3333333432674408 ),
-                                mat3( 0.3333333432674408, 0.3333333432674408, 0.3333333432674408, 0.3333333432674408, 0.3333333432674408, 0.3333333432674408, 0.3333333432674408, 0.3333333432674408, 0.3333333432674408 ));
-            
-            vec3 hsv(float h,float s,float v) { return mix(vec3(1.),clamp((abs(fract(h+vec3(3.,2.,1.)/3.)*6.-3.)-1.),0.,1.),s)*v; }
-                                         
-            void main(void)
-            {
-                mat3 I;
-                float cnv[9];
-                vec3 samp;
-            
-                /* fetch the 3x3 neighbourhood and use the RGB vector's length as intensity value */
-                for (int i=0; i<3; i++)
-                {
-                    for (int j=0; j<3; j++)
-                    {
-                        samp = texture(tex, vTexCoord + texel * vec2(i-1.0,j-1.0)).rgb;
-                        I[i][j] = length(samp); 
-                    }
-                }
+			in vec2 vTexCoord;
+			out vec4 fragColor;
 
-                /* calculate the convolution values for all the masks */
-                for (int i=0; i<9; i++)
-                {
-                    float dp3 = dot(G[i][0], I[0]) + dot(G[i][1], I[1]) + dot(G[i][2], I[2]);
-                    cnv[i] = dp3 * dp3; 
-                }
+			vec2 texel = vec2(1.0 / aspect.x, 1.0 / aspect.y);
 
-                float M = (cnv[0] + cnv[1]) + (cnv[2] + cnv[3]);
-                float S = (cnv[4] + cnv[5]) + (cnv[6] + cnv[7]) + (cnv[8] + M); 
+			// hard coded matrix values
+			mat3 G[9] = mat3[](mat3(0.3535533845424652, 0, -0.3535533845424652, 0.5, 0, -0.5, 0.3535533845424652, 0, -0.3535533845424652),
+				mat3(0.3535533845424652, 0.5, 0.3535533845424652, 0, 0, 0, -0.3535533845424652, -0.5, -0.3535533845424652),
+				mat3(0, 0.3535533845424652, -0.5, -0.3535533845424652, 0, 0.3535533845424652, 0.5, -0.3535533845424652, 0),
+				mat3(0.5, -0.3535533845424652, 0, -0.3535533845424652, 0, 0.3535533845424652, 0, 0.3535533845424652, -0.5),
+				mat3(0, -0.5, 0, 0.5, 0, 0.5, 0, -0.5, 0),
+				mat3(-0.5, 0, 0.5, 0, 0, 0, 0.5, 0, -0.5),
+				mat3(0.1666666716337204, -0.3333333432674408, 0.1666666716337204, -0.3333333432674408, 0.6666666865348816, -0.3333333432674408, 0.1666666716337204, -0.3333333432674408, 0.1666666716337204),
+				mat3(-0.3333333432674408, 0.1666666716337204, -0.3333333432674408, 0.1666666716337204, 0.6666666865348816, 0.1666666716337204, -0.3333333432674408, 0.1666666716337204, -0.3333333432674408),
+				mat3(0.3333333432674408, 0.3333333432674408, 0.3333333432674408, 0.3333333432674408, 0.3333333432674408, 0.3333333432674408, 0.3333333432674408, 0.3333333432674408, 0.3333333432674408));
 
-                fragColor = vec4(hsv(hue, saturation, sqrt(M/S)), 1.0);
-            }
-        );
+			vec3 hsv(float h, float s, float v) { return mix(vec3(1.), clamp((abs(fract(h + vec3(3., 2., 1.) / 3.) * 6. - 3.) - 1.), 0., 1.), s) * v; }
+
+			void main(void)
+			{
+				mat3 I;
+				float cnv[9];
+				vec3 samp;
+
+				/* fetch the 3x3 neighbourhood and use the RGB vector's length as intensity value */
+				for (int i = 0; i < 3; i++)
+				{
+					for (int j = 0; j < 3; j++)
+					{
+						samp = texture(tex, vTexCoord + texel * vec2(i - 1.0, j - 1.0)).rgb;
+						I[i][j] = length(samp);
+					}
+				}
+
+				/* calculate the convolution values for all the masks */
+				for (int i = 0; i < 9; i++)
+				{
+					float dp3 = dot(G[i][0], I[0]) + dot(G[i][1], I[1]) + dot(G[i][2], I[2]);
+					cnv[i] = dp3 * dp3;
+				}
+
+				float M = (cnv[0] + cnv[1]) + (cnv[2] + cnv[3]);
+				float S = (cnv[4] + cnv[5]) + (cnv[6] + cnv[7]) + (cnv[8] + M);
+
+				fragColor = vec4(hsv(hue, saturation, sqrt(M / S)), 1.0);
+			}
+		);
+
+		shader.setupShaderFromSource(GL_VERTEX_SHADER, vertShaderSrc);
+		shader.setupShaderFromSource(GL_FRAGMENT_SHADER, fragShaderSrc);
+		shader.bindDefaults();
+		shader.linkProgram();
         
         /*ostringstream oss;
-        oss << "#version 410 core\n" << endl;
+        oss << "#version 120\n" << endl;
 		oss << fragShaderSrc;*/
         // if (arb)
         // {
@@ -118,11 +124,6 @@ namespace itg
         //     oss << "#define SAMPLER_TYPE sampler2D" << endl;
         //     oss << fragShaderSrc;
         // }
-        
-        shader.setupShaderFromSource(GL_VERTEX_SHADER, vertShaderSrc);
-        shader.setupShaderFromSource(GL_FRAGMENT_SHADER, fragShaderSrc);
-		shader.bindDefaults();
-        shader.linkProgram();
 #ifdef _ITG_TWEAKABLE
         addParameter("hue", this->hue, "min=0 max=1");
         addParameter("saturation", this->saturation, "min=0 max=1");

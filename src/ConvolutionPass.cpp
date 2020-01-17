@@ -68,7 +68,7 @@ namespace itg
                                          
             void main()
             {
-            
+				
                 vec2 imageCoord = vUv;
                 vec4 sum = vec4( 0.0, 0.0, 0.0, 0.0 );
                 
@@ -83,11 +83,11 @@ namespace itg
         );
         
         ostringstream oss;
-        oss << "#version 410 core\n#define KERNEL_SIZE " << kernelSize << ".0" << endl << vertShaderSrc;
+        oss << "#version 150\n#define KERNEL_SIZE " << kernelSize << ".0" << endl << vertShaderSrc;
         shader.setupShaderFromSource(GL_VERTEX_SHADER, oss.str());
         
         oss.str("");
-        oss << "#version 410 core\n#define KERNEL_SIZE " << kernelSize << endl;
+        oss << "#version 150\n#define KERNEL_SIZE " << kernelSize << endl;
         // if (arb)
         // {
         //     oss << "#define SAMPLER_TYPE sampler2DRect" << endl;

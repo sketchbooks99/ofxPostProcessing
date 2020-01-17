@@ -37,7 +37,7 @@ namespace itg
         RenderPass(aspect, arb, "rimhighlighting")
     {
         string vertShaderSrc = STRINGIFY(
-                                         #version 410 core\n
+                                         #version 150\n
                                          uniform mat4 modelViewProjectionMatrix; 
 
                                          in vec2 texcoord;
@@ -65,7 +65,7 @@ namespace itg
                                          );
         
         string fragShaderSrc = STRINGIFY(
-                                         #version 410 core\n
+                                         #version 150\n
                                          in vec3 vNormal;
                                          in vec3 sides;
                                          in vec2 vTexCoord;

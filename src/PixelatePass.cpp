@@ -37,7 +37,7 @@ namespace itg
         resolution(resolution), RenderPass(aspect, arb, "pixelate")
     {
         string vertShaderSrc = STRINGIFY(
-                                         #version 410 core\n
+                                         #version 150\n
                                          in vec2 texcoord;
                                          in vec4 position;
                                          uniform mat4 modelViewProjectionMatrix;
@@ -49,7 +49,7 @@ namespace itg
         );
 
         string fragShaderSrc = STRINGIFY(
-            #version 410 core\n
+            #version 150\n
             uniform sampler2D tex;
             uniform float xPixels;
             uniform float yPixels;

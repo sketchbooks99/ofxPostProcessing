@@ -37,7 +37,7 @@ namespace itg
         RenderPass(aspect, arb, "verticaltiltshift"), v(2.0/512.0), r(0.5)
     {
         string vertShaderSrc = STRINGIFY(
-                                         #version 410 core\n
+                                         #version 150\n
                                          in vec2 texcoord;
                                          in vec4 position;
                                          uniform mat4 modelViewProjectionMatrix;
@@ -49,7 +49,7 @@ namespace itg
         );
 
         string fragShaderSrc = STRINGIFY(
-            #version 410 core\n
+            #version 150\n
             uniform sampler2D tDiffuse;
             uniform float v;
             uniform float r;

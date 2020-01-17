@@ -41,6 +41,7 @@ namespace itg
         this->arb = arb;
         
         ofFbo::Settings s;
+		//s.numSamples = 16;
         
         if (arb)
         {
@@ -50,8 +51,10 @@ namespace itg
         }
         else
         {
-            s.width = ofNextPow2(width);
-            s.height = ofNextPow2(height);
+            //s.width = ofNextPow2(width);
+            //s.height = ofNextPow2(height);
+			s.width = width;
+			s.height = height;
             s.textureTarget = GL_TEXTURE_2D;
         }
         
@@ -74,7 +77,7 @@ namespace itg
     void PostProcessing::begin()
     {
         raw.begin(OF_FBOMODE_NODEFAULTS);
-        raw.begin();
+        //raw.begin();
         
         ofMatrixMode(OF_MATRIX_PROJECTION);
         ofPushMatrix();
@@ -107,7 +110,7 @@ namespace itg
         ofPushMatrix();
         ofLoadMatrix(cam.getModelViewMatrix());
         
-        //ofViewport(0, 0, raw.getWidth(), raw.getHeight());
+        ofViewport(0, 0, raw.getWidth(), raw.getHeight());
         
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
         
@@ -120,7 +123,7 @@ namespace itg
         glPopAttrib();
         ofPopStyle();
         
-        //ofViewport(0, 0, ofGetWidth(), ofGetHeight());
+        ofViewport(0, 0, ofGetWidth(), ofGetHeight());
         
         ofMatrixMode(OF_MATRIX_PROJECTION);
         ofPopMatrix();
@@ -130,15 +133,15 @@ namespace itg
         
         raw.end();
         
-        /*ofPushStyle();
+        ofPushStyle();
         glPushAttrib(GL_ENABLE_BIT);
         glDisable(GL_LIGHTING);
         ofSetColor(255, 255, 255);
         process();
         if (autoDraw) draw();
         glPopAttrib();
-        ofPopStyle();*/
-		process();
+        ofPopStyle();
+		//process();
     }
     
     void PostProcessing::debugDraw()

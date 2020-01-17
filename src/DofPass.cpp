@@ -38,7 +38,7 @@ namespace itg
         focus(focus), aperture(aperture), maxBlur(maxBlur), RenderPass(aspect, arb, "dof")
     {
         string vertShaderSrc = STRINGIFY(
-                                         #version 410 core\n
+                                         #version 150\n
                                          in vec2 texcoord;
                                          in vec4 position;
                                          uniform mat4 modelViewProjectionMatrix;
@@ -51,7 +51,7 @@ namespace itg
         );
 
         string fragShaderSrc = STRINGIFY(
-            #version 410 core\n
+            #version 150\n
             uniform sampler2D tColor;
             uniform sampler2D tDepth;
             

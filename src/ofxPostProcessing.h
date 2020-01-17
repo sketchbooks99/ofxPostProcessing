@@ -55,6 +55,15 @@
 #include "GodRaysPass.h"
 #include "RimHighlightingPass.h"
 #include "LimbDarkeningPass.h"
+// Custom 
+#include "Invert.h"
+#include "Glitch.h"
+#include "Rotate.h"
+#include "Pixelsort.h"
+#include "Beyoon.h"
+#include "ReflectX.h"
+#include "ReflectY.h"
+#include "Split.h"
 
 typedef itg::PostProcessing ofxPostProcessing;
 

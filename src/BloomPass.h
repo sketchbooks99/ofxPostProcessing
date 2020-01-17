@@ -48,6 +48,12 @@ namespace itg
         void allocateSelectiveGlow(unsigned w, unsigned h);
         void beginSelectiveGlow(bool clear = true);
         void endSelectiveGlow();
+
+		void setStrength(float _strength) { strength = _strength; }
+		float getStrength() { return strength; }
+
+		void setThreshold(float _threshold) { threshold = _threshold; }
+		float getThreshold() { return threshold; }
         
         void debugDraw();
         
@@ -60,8 +66,10 @@ namespace itg
         ofFbo selectiveGlow;
         // small fbos for rendering stuff to glow
         ofFbo fbos[2];
+		ofShader shader, thresShader;
         
         unsigned currentReadFbo;
+		float strength, threshold;
         unsigned w, h;
     };
 }

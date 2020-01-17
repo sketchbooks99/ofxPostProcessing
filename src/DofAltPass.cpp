@@ -37,7 +37,7 @@ namespace itg
         focalDepth(focalDepth), focalLength(focalLength), fStop(fStop), showFocus(showFocus), RenderPass(aspect, arb, "dofalt")
     {
         string vertShaderSrc = STRINGIFY(
-                                         #version 410 core\n
+                                         #version 150\n
                                          in vec2 texcoord;
                                          in vec4 position;
                                          uniform mat4 modelViewProjectionMatrix;
@@ -50,7 +50,7 @@ namespace itg
         );
 
         string fragShaderSrc = STRINGIFY(
-            #version 410 core\n
+            #version 150\n
             /*
              DoF with bokeh GLSL shader v2.4
              by Martins Upitis (martinsh) (devlog-martinsh.blogspot.com)

@@ -36,7 +36,7 @@ namespace itg
     FxaaPass::FxaaPass(const ofVec2f& aspect, bool arb) : RenderPass(aspect, arb, "fxaa")
     {
         string vertShaderSrc = STRINGIFY(
-                                         #version 410 core\n
+                                         #version 150\n
                                          in vec2 texcoord;
                                          in vec4 position;
                                          uniform mat4 modelViewProjectionMatrix;
@@ -113,7 +113,7 @@ namespace itg
              }
         );
         ostringstream oss;
-        oss << "#version 410 core\n" << endl;
+        oss << "#version 150\n" << endl;
         // if (arb)
         // {
         //     oss << "#define SAMPLER_TYPE sampler2DRect" << endl;

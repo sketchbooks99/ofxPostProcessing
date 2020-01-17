@@ -124,7 +124,7 @@ namespace itg
         }
 
         string vertShaderSrc = STRINGIFY(
-                                         #version 410 core\n
+                                         #version 150\n
                                          in vec2 texcoord;
                                          in vec4 position;
                                          uniform mat4 modelViewProjectionMatrix;
@@ -137,7 +137,7 @@ namespace itg
 
         // setup shader
         string fragShaderSrc = STRINGIFY(
-            #version 410 core\n
+            #version 150\n
             uniform sampler2D tex;
             uniform sampler3D lut_tex;
 

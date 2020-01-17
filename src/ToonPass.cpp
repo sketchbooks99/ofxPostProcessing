@@ -42,7 +42,7 @@ namespace itg
         edgeThreshold(edgeThreshold), level(level), ambientColor(ambientColor), diffuseColor(diffuseColor), specularColor(specularColor), isSpecular(isSpecular), shinyness(shinyness), RenderPass(aspect, arb, "toon")
     {
         string vertShaderSrc = STRINGIFY(
-            #version 410 core\n
+            #version 150\n
             uniform mat4 modelViewMatrix;
             uniform mat4 modelViewProjectionMatrix;
             in vec4 position;
@@ -65,7 +65,7 @@ namespace itg
         );
         
         string fragShaderSrc = STRINGIFY(
-            #version 410 core\n
+            #version 150\n
             uniform sampler2D normalImage;
             uniform float textureSizeX;
             uniform float textureSizeY;

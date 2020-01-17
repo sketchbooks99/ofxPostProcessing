@@ -39,7 +39,7 @@ namespace itg
     {
         
         string vertShaderSrc = STRINGIFY(
-            #version 410 core\n
+            #version 150\n
             uniform mat4 modelViewProjectionMatrix;
             in vec2 texcoord;
             in vec4 color;
@@ -57,7 +57,7 @@ namespace itg
         );
         
         string fragShaderSrc = STRINGIFY(
-            #version 410 core\n
+            #version 150\n
             uniform sampler2D rtex;
             uniform sampler2D otex;
 
