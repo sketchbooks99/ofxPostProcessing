@@ -42,14 +42,14 @@ namespace itg
     radialScale(radialScale), brightness(brightness), startColor(startColor), endColor(endColor), RenderPass(aspect, arb, "limbdarkening")
     {
         string vertShaderSrc = STRINGIFY(
-                                         in vec2 texcoord;
-                                         in vec4 position;
-                                         uniform mat4 modelViewProjectionMatrix;
-                                         out vec2 vTexCoord;
-                                         void main() {
-                                             gl_Position = position;
-                                             vTexCoord = texcoord;
-                                         }
+            in vec2 texcoord;
+            in vec4 position;
+            uniform mat4 modelViewProjectionMatrix;
+            out vec2 vTexCoord;
+            void main() {
+                gl_Position = position;
+                vTexCoord = texcoord;
+            }
         );
 
         string fragShaderSrc = STRINGIFY(

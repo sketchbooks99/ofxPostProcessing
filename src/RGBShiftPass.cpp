@@ -38,33 +38,33 @@ namespace itg
         amount(amount), angle(angle), RenderPass(aspect, arb, "RGBShift")
     {
         string vertShaderSrc = STRINGIFY(
-                                         in vec2 texcoord;
-                                         in vec4 position;
-                                         uniform mat4 modelViewProjectionMatrix;
-                                         out vec2 vTexCoord;
-                                         void main() {
-                                             gl_Position = position;
-                                             vTexCoord = texcoord;
-                                         }
+            in vec2 texcoord;
+            in vec4 position;
+            uniform mat4 modelViewProjectionMatrix;
+            out vec2 vTexCoord;
+            void main() {
+                gl_Position = position;
+                vTexCoord = texcoord;
+            }
         );
 
         string fragShaderSrc = STRINGIFY(
-                                         uniform sampler2D tDiffuse;
-                                         uniform float amount;
-                                         uniform float angle;
+            uniform sampler2D tDiffuse;
+            uniform float amount;
+            uniform float angle;
 
-                                         in vec2 vTexCoord;
-                                         out vec4 fragColor;
+            in vec2 vTexCoord;
+            out vec4 fragColor;
                         
-                                         void main() {
-                                         vec2 vUv = vTexCoord;
-                                         vec2 offset = amount * vec2( cos(angle), sin(angle));
-                                         vec4 cr = texture(tDiffuse, vUv + offset);
-                                         vec4 cga = texture(tDiffuse, vUv);
-                                         vec4 cb = texture(tDiffuse, vUv - offset);
-                                         fragColor = vec4(cr.r, cga.g, cb.b, cga.a);
+            void main() {
+                vec2 vUv = vTexCoord;
+                vec2 offset = amount * vec2( cos(angle), sin(angle));
+                vec4 cr = texture(tDiffuse, vUv + offset);
+                vec4 cga = texture(tDiffuse, vUv);
+                vec4 cb = texture(tDiffuse, vUv - offset);
+                fragColor = vec4(cr.r, cga.g, cb.b, cga.a);
                                          
-                                         }
+            }
         );
         
         ostringstream oss;

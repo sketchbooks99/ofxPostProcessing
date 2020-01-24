@@ -37,60 +37,58 @@ namespace itg
         RenderPass(aspect, arb, "rimhighlighting")
     {
         string vertShaderSrc = STRINGIFY(
-                                         uniform mat4 modelViewProjectionMatrix; 
+            uniform mat4 modelViewProjectionMatrix; 
 
-                                         in vec2 texcoord;
-                                         in vec3 normal;
-                                         in vec4 position;
-                                         in vec4 color;
+            in vec2 texcoord;
+            in vec3 normal;
+            in vec4 position;
+            in vec4 color;
 
-                                         out vec3 vNormal;
-                                         out vec3 sides;
-                                         out vec2 vTexCoord;
-                                         out vec4 vColor;
+            out vec3 vNormal;
+            out vec3 sides;
+            out vec2 vTexCoord;
+            out vec4 vColor;
                                          
-                                         void main()
-        {
-            vNormal = gl_NormalMatrix * normal;
-            gl_Position = position;
-            sides = gl_Position.xyz;
-            sides.x = sides.x - 128.0;
-            
-            // vTexCoord = vec2(gl_MultiTexCoord0);
-            vTexCoord = texcoord;
-            // v_color = gl_Color;
-            vColor = color;
-        }
-                                         );
+            void main() {
+                vNormal = gl_NormalMatrix * normal;
+                gl_Position = position;
+                sides = gl_Position.xyz;
+                sides.x = sides.x - 128.0;
+                
+                // vTexCoord = vec2(gl_MultiTexCoord0);
+                vTexCoord = texcoord;
+                // v_color = gl_Color;
+                vColor = color;
+            }
+        );
         
         string fragShaderSrc = STRINGIFY(
-                                         in vec3 vNormal;
-                                         in vec3 sides;
-                                         in vec2 vTexCoord;
-                                         uniform sampler2D myTexture;
-                                         in vec4 vColor;
+            in vec3 vNormal;
+            in vec3 sides;
+            in vec2 vTexCoord;
+            uniform sampler2D myTexture;
+            in vec4 vColor;
 
-                                         out vec4 fragColor;
+            out vec4 fragColor;
                                          
-                                         void main()
-        {
-            float intensity;
-            vec3 n = normalize(vNormal);
-            vec4 color;
-            intensity = dot(sides,n);
-            
-            fragColor = texture(myTexture, vTexCoord);
-            if (intensity >= 64.0)
-            {
-                fragColor.b = fragColor.b / 1.5;
-                fragColor.r = fragColor.r * 1.5;
-                fragColor.g = fragColor.g * 1.25;
+            void main() {
+                float intensity;
+                vec3 n = normalize(vNormal);
+                vec4 color;
+                intensity = dot(sides,n);
+                
+                fragColor = texture(myTexture, vTexCoord);
+                if (intensity >= 64.0)
+                {
+                    fragColor.b = fragColor.b / 1.5;
+                    fragColor.r = fragColor.r * 1.5;
+                    fragColor.g = fragColor.g * 1.25;
+                }
+                else
+                {
+                    fragColor = fragColor * vColor;
+                }
             }
-            else
-            {
-                fragColor = fragColor * vColor;
-            }
-        }
         );
         
         ostringstream oss;

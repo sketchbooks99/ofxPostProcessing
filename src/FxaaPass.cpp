@@ -36,14 +36,14 @@ namespace itg
     FxaaPass::FxaaPass(const ofVec2f& aspect, bool arb) : RenderPass(aspect, arb, "fxaa")
     {
         string vertShaderSrc = STRINGIFY(
-                                         in vec2 texcoord;
-                                         in vec4 position;
-                                         uniform mat4 modelViewProjectionMatrix;
-                                         out vec2 vTexCoord;
-                                         void main() {
-											 gl_Position = position;
-                                             vTexCoord = texcoord;
-                                         }
+            in vec2 texcoord;
+            in vec4 position;
+            uniform mat4 modelViewProjectionMatrix;
+            out vec2 vTexCoord;
+            void main() {
+				gl_Position = position;
+                vTexCoord = texcoord;
+            }
         );
 
         string fragShaderSrc = STRINGIFY(

@@ -7,25 +7,25 @@ namespace itg
 	{
 		string vertShaderSrc = STRINGIFY(
 			in vec2 texcoord;
-		in vec4 position;
-		out vec2 vTexCoord;
-		void main() {
-			gl_Position = position;
-			vTexCoord = texcoord;
-		}
+			in vec4 position;
+			out vec2 vTexCoord;
+			void main() {
+				gl_Position = position;
+				vTexCoord = texcoord;
+			}
 		);
 
 		string fragShaderSrc = STRINGIFY(
 			uniform sampler2D tex;
 
-		in vec2 vTexCoord;
-		out vec4 fragColor;
+			in vec2 vTexCoord;
+			out vec4 fragColor;
 
-		void main()
-		{
-			vec2 uv = mod(vTexCoord * 2.0, 1.0);
-            fragColor = texture(tex, uv);
-		}
+			void main()
+			{
+				vec2 uv = mod(vTexCoord * 2.0, 1.0);
+				fragColor = texture(tex, uv);
+			}
 		);
 
         ostringstream oss;

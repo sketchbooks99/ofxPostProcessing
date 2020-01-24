@@ -40,38 +40,38 @@ namespace itg
         multiple = 1.0f;
 
         string vertShaderSrc = STRINGIFY(
-                                         in vec2 texcoord;
-                                         in vec4 position;
-                                         uniform mat4 modelViewProjectionMatrix;
-                                         out vec2 vTexCoord;
-                                         void main() {
-											 gl_Position = position;
-                                             vTexCoord = texcoord;
-                                         }
+            in vec2 texcoord;
+            in vec4 position;
+            uniform mat4 modelViewProjectionMatrix;
+            out vec2 vTexCoord;
+            void main() {
+				gl_Position = position;
+                vTexCoord = texcoord;
+            }
         );
 
         string fragShaderSrc = STRINGIFY(
-                                         uniform sampler2D tex0;
-                                         uniform float contrast;
-                                         uniform float brightness;
-                                         uniform float multiple;
+            uniform sampler2D tex0;
+            uniform float contrast;
+            uniform float brightness;
+            uniform float multiple;
 
-                                         in vec2 vTexCoord;
+            in vec2 vTexCoord;
 
-                                         out vec4 fragColor;
+            out vec4 fragColor;
                                          
-                                         void main(){
-                                             vec4 color = texture(tex0,vTexCoord);
+            void main(){
+                vec4 color = texture(tex0,vTexCoord);
                                              
-                                             float p = 0.3 *color.g + 0.59*color.r + 0.11*color.b;
-                                             p = p * brightness;
-                                             vec4 color2 = vec4(p,p,p,1.0);
-                                             color *= color2;
-                                             color *= vec4(multiple,multiple,multiple,1.0);
-                                             color = mix( vec4(1.0,1.0,1.0,1.0),color,contrast);
+                float p = 0.3 *color.g + 0.59*color.r + 0.11*color.b;
+                p = p * brightness;
+                vec4 color2 = vec4(p,p,p,1.0);
+                color *= color2;
+                color *= vec4(multiple,multiple,multiple,1.0);
+                color = mix( vec4(1.0,1.0,1.0,1.0),color,contrast);
                                              
-                                             fragColor = vec4(color.r , color.g, color.b, 1.0);
-                                         }
+                fragColor = vec4(color.r , color.g, color.b, 1.0);
+            }
         );
         
         ostringstream oss;

@@ -3,6 +3,7 @@
 
 namespace itg {
 	Pixelsort::Pixelsort(const ofVec2f& aspect, bool arb) : RenderPass(aspect, arb, "Pixelsort") {
+		
 		string vertShaderSrc = STRINGIFY(
 			in vec2 texcoord;
 			in vec4 position;

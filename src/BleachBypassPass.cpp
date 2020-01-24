@@ -38,43 +38,43 @@ namespace itg
         opacity(opacity), RenderPass(aspect, arb, "bleachbypass")
     {
         string vertShaderSrc = STRINGIFY(
-                                         in vec2 texcoord;
-                                         in vec4 position;
-                                         uniform mat4 modelViewProjectionMatrix;
-                                         out vec2 vTexCoord;
-                                         void main() {
-                                             gl_Position = position;
-                                             vTexCoord = texcoord;
-                                         }
+            in vec2 texcoord;
+            in vec4 position;
+            uniform mat4 modelViewProjectionMatrix;
+            out vec2 vTexCoord;
+            void main() {
+                gl_Position = position;
+                vTexCoord = texcoord;
+            }
         );
 
         string fragShaderSrc = STRINGIFY(
-                                         uniform float opacity;
-                                         uniform sampler2D tDiffuse;
+            uniform float opacity;
+            uniform sampler2D tDiffuse;
 
-                                         out vec4 fragColor;
-                                         void main() {
-                                             vec2 vUv = vTexCoord;
-                                             vec4 base = texture( tDiffuse, vUv );
+            out vec4 fragColor;
+            void main() {
+                vec2 vUv = vTexCoord;
+                vec4 base = texture( tDiffuse, vUv );
                                              
-                                             vec3 lumCoeff = vec3( 0.25, 0.65, 0.1 );
-                                             float lum = dot( lumCoeff, base.rgb );
-                                             vec3 blend = vec3( lum );
+                vec3 lumCoeff = vec3( 0.25, 0.65, 0.1 );
+                float lum = dot( lumCoeff, base.rgb );
+                vec3 blend = vec3( lum );
                                              
-                                             float L = min( 1.0, max( 0.0, 10.0 * ( lum - 0.45 ) ) );
+                float L = min( 1.0, max( 0.0, 10.0 * ( lum - 0.45 ) ) );
                                              
-                                             vec3 result1 = 2.0 * base.rgb * blend;
-                                             vec3 result2 = 1.0 - 2.0 * ( 1.0 - blend ) * ( 1.0 - base.rgb );
+                vec3 result1 = 2.0 * base.rgb * blend;
+                vec3 result2 = 1.0 - 2.0 * ( 1.0 - blend ) * ( 1.0 - base.rgb );
+                                            
+                vec3 newColor = mix( result1, result2, L );
                                              
-                                             vec3 newColor = mix( result1, result2, L );
+                float A2 = opacity * base.a;
+                vec3 mixRGB = A2 * newColor.rgb;
+                mixRGB += ( ( 1.0 - A2 ) * base.rgb );
                                              
-                                             float A2 = opacity * base.a;
-                                             vec3 mixRGB = A2 * newColor.rgb;
-                                             mixRGB += ( ( 1.0 - A2 ) * base.rgb );
+                fragColor = vec4( mixRGB, base.a );
                                              
-                                             fragColor = vec4( mixRGB, base.a );
-                                             
-                                         }
+            }
         );
         
         ostringstream oss;

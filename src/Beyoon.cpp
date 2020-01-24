@@ -18,7 +18,7 @@ namespace itg
 
 		string fragShaderSrc = STRINGIFY(
 			uniform sampler2D tex;
-		uniform vec2 offset;
+		    uniform vec2 offset;
 
             in vec2 vTexCoord;
             out vec4 fragColor;
