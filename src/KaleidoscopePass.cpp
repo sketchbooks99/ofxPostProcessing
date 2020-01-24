@@ -37,7 +37,6 @@ namespace itg
         segments(segments), RenderPass(aspect, arb, "kaleido")
     {
         string vertShaderSrc = STRINGIFY(
-                                         #version 150\n
                                          in vec2 texcoord;
                                          in vec4 position;
                                          uniform mat4 modelViewProjectionMatrix;
@@ -49,7 +48,6 @@ namespace itg
         );
 
         string fragShaderSrc = STRINGIFY(
-            #version 150\n
             uniform sampler2D tex;
             uniform float segments;
 
@@ -70,8 +68,16 @@ namespace itg
             }
         );
 
-        shader.setupShaderFromSource(GL_VERTEX_SHADER, vertShaderSrc);
-        shader.setupShaderFromSource(GL_FRAGMENT_SHADER, fragShaderSrc);
+        ostringstream oss;
+        oss << "#version 150" << endl;
+        oss << vertShaderSrc << endl;
+        shader.setupShaderFromSource(GL_VERTEX_SHADER, oss.str());
+        
+        oss.str("");
+        oss << "#version 150" << endl;
+        oss << fragShaderSrc << endl;
+        shader.setupShaderFromSource(GL_FRAGMENT_SHADER, oss.str());
+        
 		shader.bindDefaults();
         shader.linkProgram();
 #ifdef _ITG_TWEAKABLE

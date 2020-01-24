@@ -36,7 +36,6 @@ namespace itg
     FxaaPass::FxaaPass(const ofVec2f& aspect, bool arb) : RenderPass(aspect, arb, "fxaa")
     {
         string vertShaderSrc = STRINGIFY(
-                                         #version 150\n
                                          in vec2 texcoord;
                                          in vec4 position;
                                          uniform mat4 modelViewProjectionMatrix;
@@ -113,21 +112,15 @@ namespace itg
              }
         );
         ostringstream oss;
-        oss << "#version 150\n" << endl;
-        // if (arb)
-        // {
-        //     oss << "#define SAMPLER_TYPE sampler2DRect" << endl;
-        //     // oss << "#define texture texture" << endl;
-        //     oss << fragShaderSrc;
-        // }
-        // else
-        // {
-        //     oss << "#define SAMPLER_TYPE sampler2D" << endl;
-        //     // oss << "#define texture texture2D" << endl;
-        //     oss << fragShaderSrc;
-        // }
-        shader.setupShaderFromSource(GL_VERTEX_SHADER, vertShaderSrc);
+        oss << "#version 150" << endl;
+        oss << vertShaderSrc << endl;
+        shader.setupShaderFromSource(GL_VERTEX_SHADER, oss.str());
+        
+        oss.str("");
+        oss << "#version 150" << endl;
+        oss << fragShaderSrc << endl;
         shader.setupShaderFromSource(GL_FRAGMENT_SHADER, oss.str());
+        
 		shader.bindDefaults();
         shader.linkProgram();
     }

@@ -42,7 +42,6 @@ namespace itg
         edgeThreshold(edgeThreshold), level(level), ambientColor(ambientColor), diffuseColor(diffuseColor), specularColor(specularColor), isSpecular(isSpecular), shinyness(shinyness), RenderPass(aspect, arb, "toon")
     {
         string vertShaderSrc = STRINGIFY(
-            #version 150\n
             uniform mat4 modelViewMatrix;
             uniform mat4 modelViewProjectionMatrix;
             in vec4 position;
@@ -65,7 +64,6 @@ namespace itg
         );
         
         string fragShaderSrc = STRINGIFY(
-            #version 150\n
             uniform sampler2D normalImage;
             uniform float textureSizeX;
             uniform float textureSizeY;
@@ -151,8 +149,16 @@ namespace itg
                                          
 
         );
-        shader.setupShaderFromSource(GL_VERTEX_SHADER, vertShaderSrc);
-        shader.setupShaderFromSource(GL_FRAGMENT_SHADER, fragShaderSrc);
+        ostringstream oss;
+        oss << "#version 150" << endl;
+        oss << vertShaderSrc << endl;
+        shader.setupShaderFromSource(GL_VERTEX_SHADER, oss.str());
+        
+        oss.str("");
+        oss << "#version 150" << endl;
+        oss << fragShaderSrc << endl;
+        shader.setupShaderFromSource(GL_FRAGMENT_SHADER, oss.str());
+        
 		shader.bindDefaults();
         shader.linkProgram();
         
