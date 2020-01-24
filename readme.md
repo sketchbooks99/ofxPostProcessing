@@ -1,5 +1,9 @@
 # ofxPostProcessing
 
+This corresponds to the Programmable renderer (OpenGL 3.2 ~, GLSL 150 ~)
+
+---
+
 This openFrameworks addon gives you an easy way of putting together a chain of GLSL post-processing effects.
 
 www.neilmendoza.com/ofxpostprocessing
