@@ -1,6 +1,6 @@
 # ofxPostProcessing
 
-This corresponds to the Programmable renderer (OpenGL 3.2 ~, GLSL 150 ~)
+This addon is compatible with programmable renderer (OpenGL 3.2 ~, GLSL 150 ~).
 
 ---
 
